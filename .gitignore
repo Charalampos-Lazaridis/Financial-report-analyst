@@ -1,0 +1,14 @@
+# Secrets: never commit
+.env
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Downloaded filings (large, re-downloadable)
+data/filings/
+
+docs
+CLAUDE.md
+capstone-brief.md

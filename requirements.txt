@@ -1,0 +1,9 @@
+openai          # talk to the OpenAI API
+pydantic        # define and validate data shapes (structured output)
+python-dotenv   # load settings from the .env file
+requests        # download filings from SEC EDGAR
+beautifulsoup4  # turn filing HTML into plain text
+pypdf           # read text out of PDF files
+fastapi         # the /ask web API
+uvicorn         # the server that runs FastAPI
+streamlit       # the web UI

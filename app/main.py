@@ -1,0 +1,14 @@
+from fastapi import FastAPI
+from pydantic import BaseModel, ConfigDict, Field
+
+from app.analyst import MAX_QUESTION_LENGTH, AskResponse, ask
+
+app = FastAPI(title="Financial Report Analyst")
+
+class AskRequest(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True)
+    question: str = Field(min_length=1, max_length=MAX_QUESTION_LENGTH)
+
+@app.post("/ask")
+def ask_endpoint(request: AskRequest) -> AskResponse:
+    return ask(request.question)

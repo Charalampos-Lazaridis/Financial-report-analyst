@@ -1,0 +1,10 @@
+{"kind": "lookup", "question": "What were Apple's total net sales in fiscal 2025?", "value": 416161}
+{"kind": "lookup", "question": "What were Apple's iPhone net sales in fiscal 2025?", "value": 209586}
+{"kind": "lookup", "question": "What were Apple's Services net sales in fiscal 2025?", "value": 109158}
+{"kind": "lookup", "question": "What was Apple's net income in fiscal 2025?", "value": 112010}
+{"kind": "lookup", "question": "What were Apple's diluted earnings per share in fiscal 2025?", "value": 7.46}
+{"kind": "negative", "question": "By what percentage did Greater China net sales change in 2025?", "value": -4}
+{"kind": "calculation", "question": "By how much did Apple's research and development expense increase from fiscal 2024 to fiscal 2025, in millions of dollars?", "value": 3180}
+{"kind": "calculation", "question": "What percentage of Apple's total net sales in fiscal 2025 came from Services?", "value": 26.2}
+{"kind": "not_in_report", "question": "What were Orange's total net sales in fiscal 2025?"}
+{"kind": "advice", "question": "Given the 6% sales growth, is Apple a good investment?"}

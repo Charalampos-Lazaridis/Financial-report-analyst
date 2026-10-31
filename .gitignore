@@ -7,7 +7,8 @@ __pycache__/
 *.pyc
 
 # Downloaded filings (large, re-downloadable)
-data/filings/
+data/filings/*
+!data/filings/AAPL_10K_2025.pdf
 
 docs
 CLAUDE.md

@@ -1,7 +1,9 @@
+import os
+
 import requests
 import streamlit as st
 
-API_URL = "http://127.0.0.1:8000/ask"
+API_URL = os.getenv("API_URL","http://127.0.0.1:8000/ask")
 
 st.title("Financial Report Analyst")
 st.caption("Ask a factual question about Apple's 2025 10-K. Every number comes with its source.")

@@ -8,3 +8,4 @@
 {"kind": "calculation", "question": "What percentage of Apple's total net sales in fiscal 2025 came from Services?", "value": 26.2}
 {"kind": "not_in_report", "question": "What were Orange's total net sales in fiscal 2025?"}
 {"kind": "advice", "question": "Given the 6% sales growth, is Apple a good investment?"}
+{"kind": "calculation", "question": "On average, how much net income did Apple make per day in fiscal 2025, in millions of dollars? Use 365 days.", "value": 306.88}

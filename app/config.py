@@ -18,3 +18,9 @@ def _required(name: str) -> str:
 
 OPENAI_API_KEY = _required("OPENAI_API_KEY")
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+
+EMBEDDING_MODEL = "text-embedding-3-small"
+# Qdrant: empty QDRANT_URL means "use a local folder" (dev); set it for Qdrant Cloud (prod).
+QDRANT_URL = os.getenv("QDRANT_URL")
+QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
+QDRANT_PATH = "qdrant_data"

@@ -13,3 +13,6 @@ data/filings/*
 docs
 CLAUDE.md
 capstone-brief.md
+
+# Local vector database (rebuilt by python -m app.ingest)
+qdrant_data/

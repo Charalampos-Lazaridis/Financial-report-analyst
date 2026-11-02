@@ -7,3 +7,4 @@ pypdf           # read text out of PDF files
 fastapi         # the /ask web API
 uvicorn         # the server that runs FastAPI
 streamlit       # the web UI
+qdrant-client   # vector database (local folder in dev, Qdrant Cloud in prod)

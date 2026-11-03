@@ -1,7 +1,7 @@
 import json
 import math
 
-from app.analyst import FALLBACK_ANSWER, AskResponse, ask
+from app.analyst import FALLBACK_ANSWER, AskResponse, ask, qdrant
 
 def load_tests(path: str) -> list[dict]:
     with open(path, encoding="utf-8") as file:
@@ -32,3 +32,4 @@ for test in tests:
         print("        got:     ", result.answer)
 
 print(f"\n{passes}/{len(tests)} passed")
+qdrant.close()

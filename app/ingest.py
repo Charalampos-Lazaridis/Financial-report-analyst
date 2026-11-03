@@ -35,7 +35,7 @@ openai_client = OpenAI(api_key=config.OPENAI_API_KEY, max_retries=3, timeout=60)
 def get_qdrant():
     """Connect to Qdrant Cloud if a URL is set, otherwise use the local folder."""
     if config.QDRANT_URL:
-        return QdrantClient(url=config.QDRANT_URL, api_key=config.QDRANT_API_KEY)
+        return QdrantClient(url=config.QDRANT_URL, api_key=config.QDRANT_API_KEY, timeout=60)
     return QdrantClient(path=config.QDRANT_PATH)
 
 
@@ -80,6 +80,9 @@ def ensure_collection(client):
             collection_name=COLLECTION,
             vectors_config=models.VectorParams(size=EMBEDDING_SIZE, distance=models.Distance.COSINE),
         )
+    # Qdrant Cloud needs an index on a field before we can filter on it (the delete in ingest_document).
+    # Creating it again when it exists is harmless; the local folder mode simply ignores it.
+    client.create_payload_index(COLLECTION, field_name="doc_name", field_schema=models.PayloadSchemaType.KEYWORD)
 
 
 def ingest_document(client, doc_name, company, year):

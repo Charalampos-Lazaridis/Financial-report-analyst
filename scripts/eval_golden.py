@@ -9,7 +9,8 @@ from pydantic import BaseModel
 from app import config
 from app.analyst import FALLBACK_ANSWER, PRICES, TOP_K, ask, qdrant
 
-RUN_NAME = "k20"  # change this for each experiment so results files don't overwrite each other
+RUN_NAME = "full_input_check"  # change this for each experiment so results files don't overwrite each other
+QUESTIONS = [5, 6, 7, 11, 15, 17, 19, 22, 25, 34, 40, 43, 44, 45, 46]  # None = all 48
 REJUDGE_FROM = None  # None = run ask() again; a path = only re-grade those saved answers
 JUDGE_MODEL = "gpt-4o-mini"
 JUDGE_INSTRUCTIONS = (
@@ -23,7 +24,7 @@ JUDGE_INSTRUCTIONS = (
     "none / not outlined, a candidate that says the same thing in other words is correct.\n"
     "- For yes/no questions, the yes or no must match.\n"
     "Incorrect if a key number or the conclusion differs or is missing, "
-    "or if the candidate says the information isn't available while the reference gives an answer."
+    "or if the candidate says the information isn't vailable while the reference gives an answer."
 )
 
 class Verdict(BaseModel):
@@ -56,6 +57,9 @@ def first_hit_rank(test: dict, sources) -> int | None:
 
 with open("data/golden_set.jsonl", encoding="utf-8") as file:
     tests = [json.loads(line) for line in file if line.strip()]
+
+if QUESTIONS:
+    tests = [tests[n - 1] for n in QUESTIONS]
 
 if REJUDGE_FROM:
     # Re-grade saved answers only: the answers stay fixed, so any score change comes from the judge
@@ -91,6 +95,9 @@ else:
             "judge_reason": verdict.reason,
             "fallback": result is FALLBACK_ANSWER,
             "cost_usd": result.cost_usd,
+            "confidence": result.confidence,
+            "warnings": result.warnings,
+            "calculations": [calculation.model_dump() for calculation in result.calculations],
             "judge_cost_usd": round(judge_cost, 6),
         })
         print(f"{n:>2}/{len(tests)}  {'CORRECT' if verdict.correct else 'WRONG  '}  "

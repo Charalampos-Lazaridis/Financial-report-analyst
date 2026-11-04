@@ -5,6 +5,38 @@ One lever changed per run. Each run is scored on the 48-question FinanceBench go
 - **Accuracy**: share of answers the judge marks correct.
 - **Hit rate**: share of questions where an evidence page is among the retrieved chunks.
 
+## Summary
+
+Naive RAG answered **9 of 48** FinanceBench questions correctly. After a judge fix, a prompt fix and more retrieved chunks, the shipped version (live since 2026-11-04) answers **17 of 48**, at about $0.0014 per question with `gpt-4o-mini`. For context, the FinanceBench paper reports GPT-4-Turbo with a shared vector store failing or refusing about 81% of its questions.
+
+| Step | Run | Correct | Evidence retrieved (any page / all pages) | Answer cost per question | What changed |
+|---|---|---|---|---|---|
+| Baseline | `naive_k5` | 9/48 | 21 / – | $0.00044 | Top 5 chunks, simple prompt |
+| Judge fix | `naive_k5_judge2` | 14/48 | 21 / – | (re-graded only) | Judge grades meaning, not wording. Same answers |
+| Prompt v2 | `prompt_v2` | 12/48 | 21 / – | $0.00044 | "Compute, refuse only if nothing is relevant" |
+| Prompt v3 | `prompt_v3` | 14/48 | 20 / 18 | $0.00045 | Fixed v2's side effects. **Frozen** |
+| k = 10 | `k10` | 15/48 | 25 / 20 | $0.00077 | 10 chunks per question |
+| **k = 20 (shipped)** | `k20` | **17/48** | **34 / 29** | **$0.00136** | 20 chunks per question |
+
+What each step taught us:
+
+1. **Measure the measurement first.** The original judge marked correct answers wrong for extra detail or different wording. Fixing it moved the score from 9 to 14 without changing a single answer. We checked the flipped verdicts by hand and found one false positive (#42), so the true score is about one point lower.
+2. **The model refused too much.** With the original prompt, 24 of 48 answers were "the reports don't contain this", 7 of them with the evidence in hand. Prompt v2 cut refusals to 3, but caused new failures: one-word answers, and "this metric isn't useful" as a new excuse. v3 fixed part of that. The net effect on accuracy is zero, but failures now show up as wrong answers we can analyse rather than refusals.
+3. **The evidence is found but ranked too low.** 46 of 48 evidence pages are in the top 100 chunks, but only 21 are in the top 5. Taking 20 chunks raised the hit rate from 20 to 34.
+4. **More evidence doesn't mean more correct answers.** 14 extra hits gave 3 extra correct answers. The biggest group is now "evidence retrieved, answer wrong" (23 questions), mostly calculations (quick ratio, inventory turnover, EBITDA) that the model gets wrong or avoids, even with the inputs in hand.
+
+Why we stopped here:
+
+- The remaining failures are mostly the model's arithmetic and reasoning, not retrieval. Reranking or hybrid search could raise the hit rate, but at k=20 hits barely move accuracy.
+- With 48 questions, the score varies by about ±2 between identical runs: 12 verdicts changed across the last three runs. Small improvements can't be told apart from noise.
+
+Next:
+
+- **Unit 3 (tools):** a calculator, and structured financial data from the SEC, for the calculation questions.
+- **Better table extraction** (tables as rows and columns instead of pypdf's flat text): the one retrieval-side change that would also help the model read the numbers.
+
+Known issues in the shipped version: answers are short (median about 100 characters); the model does arithmetic in its head (Apple net income per day: 306.03 instead of 306.88); the "evidence retrieved" metric counts any one evidence page, which overstates multi-page questions (hence the "all pages" column).
+
 ## Run log
 
 | Run | Date | Change vs. previous | Accuracy | Hit rate | Hit+correct | Hit+wrong | Miss+correct | Miss+wrong | Cost (answers + judge) |
@@ -15,6 +47,42 @@ One lever changed per run. Each run is scored on the 48-question FinanceBench go
 | `prompt_v3` | 2026-11-03 | Answer prompt: support in 2–4 sentences, special case only when shown, no example phrases. **Frozen** | 14/48 | 20/48 | 6 | 14 | 8 | 20 | $0.0218 + $0.0037 |
 | `k10` | 2026-11-03 | `TOP_K` 5 → 10 | 15/48 | 25/48 | 10 | 15 | 5 | 18 | $0.0368 + $0.0038 |
 | `k20` | 2026-11-03 | `TOP_K` 10 → 20 | 17/48 | 34/48 | 11 | 23 | 6 | 8 | $0.0652 + $0.0038 |
+| `calc_tool` | 2026-11-04 | Unit 3: calculator tool + agent loop (`MAX_STEPS = 5`), prompt says never do arithmetic yourself | 15/48 | 31/48 (see note) | 12 | 19 | 3 | 14 | $0.0685 (undercount, see note) + $0.0038 |
+| `calc_tool_forced_answer` | 2026-11-04 | Last step has tools off (`tool_choice="none"`), forced answers get low confidence | 19/48 | 35/48 | 15 | 20 | 4 | 9 | $0.0963 + $0.0039 |
+
+Notes on the two Unit 3 runs:
+
+- **`calc_tool`:** 4 questions hit `MAX_STEPS` and returned the fallback. Fallbacks carry no sources and record $0, which lowers the hit rate and the cost shown.
+- **`calc_tool_forced_answer`:** the +4 is noise. All 6 changed verdicts were on questions that never called the calculator. 6/48 used it and 1 was correct (#44). All 4 forced answers were wrong.
+- **Finding, which corrects "mostly arithmetic" in the summary above:** the common failure is a missing input. #11, #40 and #45 never retrieved the page holding a number they needed, though #40 and #45 count as hits because another evidence page was found. #44 and #45 need nearly the same numbers: #44 had the cash flow page and was correct, #45 didn't and was wrong. The model invents substitutes instead of saying an input is missing (#45 used 132 + 939 as D&A; #11 gave a quick ratio of 465.51). #5 had both evidence pages and still used wrong numbers; #6 lost a sign and reported 0.03, which it never calculated.
+
+**`search_tool` (2026-11-04), 15-question subset (5, 6, 7, 11, 15, 17, 19, 22, 25, 34, 40, 43, 44, 45, 46), so not comparable with the /48 rows:** added `search_reports` (one company, 5 new excerpts per search) and a rule to name a missing input instead of substituting. **5/15** vs 3/15 for `calc_tool_forced_answer` on the same questions. Hit 11/15 (4 / 7 / 1 / 3). All evidence pages retrieved: 10/15 vs 7/15. Cost $0.0831 + $0.0011, vs $0.0493 for answers before (+69%). 7/15 were forced answers.
+
+- **Search found the missing pages:** #11 (p55), #40 (p45) and #45 (p63) all retrieved them. #45 is a real gain (16.5%). #22's gain is noise: it used no tools.
+- **Failures moved to wrong definitions and inputs:** #5 used revenue instead of cost of sales, #40 used sales and the same inventory twice, #11 and #46 got the quick ratio wrong with the page in hand. #46 used 50000 as an input, with no warning, because `check_figures` checks results and not the numbers inside an expression.
+- **The missing-input rule didn't change behaviour:** no answer named a missing input.
+
+**`statements_k11` (2026-11-05), same 15 questions:** removed the search tool. `retrieve_context` takes the top 11 chunks plus 3 from each of three fixed statement searches, for the most common company in the top 20. **3/15** by the judge. All evidence pages retrieved: 13/15 (7 calculator only, 10 search). Cost $0.0399 + $0.0012 (calculator only $0.0493, search $0.0831). 3/15 forced answers (search: 7).
+
+- **Judge errors affect this score:** #22 gives practically the same answer that the judge passed in `search_tool` ("decreased by 3.0 percentage points") and is now marked wrong. #19 lists the reference's four regions and is marked wrong, although the judge's own reason says they match. Graded by hand, this run is about 5/15, level with `search_tool`.
+- **Real gain:** #11 now gets the quick ratio of 1.57, with the balance sheet retrieved from the start. #45 stays correct at 16.5%.
+- **Real losses:** #15 and #44 had their evidence and misread numbers (#15 chose investing at $1,999M; #44 used operating income of 11,763 instead of 11,512). `check_figures` flagged both.
+- **Still failing with the pages in hand:** #5 and #40 use revenue instead of cost of sales, #7 and #46 say the quick ratio doesn't apply, #6 gives -1.53 with no percent sign against a reference of -0.02.
+
+**`definitions` (2026-11-05), 8 calculation questions (5, 6, 7, 11, 40, 44, 45, 46):** added definitions of inventory turnover, quick ratio and return on assets, plus "do each calculation once". **3/8** (2/8 in `statements_k11` on the same questions), hit 8/8, $0.0332 + $0.0006 (was $0.0305), 3 forced answers.
+
+- **Behaviour improved:** #7 and #46 now calculate the quick ratio instead of saying it doesn't apply. Their conclusions match the reference, but the numbers differ (#46 0.56 vs 0.54; #7 0.57 vs 0.69), so the judge marks them wrong.
+- **The references use different definitions:** inventory turnover is year-end inventory in #5 and average inventory in #40. The quick ratio has three forms: cash + investments + receivables (#11), current assets less inventory (#7), and that less prepaid expenses too (#46). No single definition can match them all. #5 passed by not following our definition.
+- **The right number was calculated, then a wrong one reported:** #40 got 2.72 first and answered 8.30 (a calculation using revenue). #45 got 16.52% and answered 16.76% (from a misread 11,712). All 3 forced answers were wrong.
+- **Misread inputs recur:** PepsiCo operating profit 11,512 appeared as 11,763 (#44, previous run) and 11,712 (#45, this run). `check_figures` can flag this in figures, but nothing checks the numbers inside a calculation.
+- **"Do each calculation once" didn't work:** #11 and #46 still repeated a calculation.
+
+**`full_input_check` (2026-11-05), all 48, comparable with `k20`:** fixed retrieval, calculator, definitions, `MAX_STEPS = 3`, and `unknown_inputs` rejecting calculations whose numbers of 1,000 or more aren't in the excerpts or earlier results. **18/48** (`k20`: 17/48, within noise). Any evidence page 40/48 (34), all evidence pages 36/48 (29). Hit+correct 14, hit+wrong 26, miss+correct 4, miss+wrong 4. Cost $0.0835 + $0.0038 (`k20`: $0.0652 answers, +28%). 0 fallbacks.
+
+- **Retrieval improved but accuracy didn't follow:** 7 more questions have all their evidence, and 26 still answer wrongly with evidence in hand. 7/48 used the calculator, 2 of them correct.
+- **The input check works:** it rejected 11700, 11711, 11983 and others. #44 corrected itself after a rejection and reached $9,068M. #45 kept proposing numbers that were rejected and was forced to answer 21.8%.
+- **One-word answers cost points:** #11 calculated 1.57 and answered only "Yes"; #32 also answered "Yes". The judge marks these wrong for missing the number or reason.
+- **Judge error:** #5 answered 9.54 against 9.5 and was marked wrong, although the judge's rules allow small rounding differences.
 
 ## `naive_k5`: baseline setup
 

@@ -1,13 +1,31 @@
+import json
+import math
+import re
+
 from typing import Literal
 
 from openai import APIError, OpenAI
 from pydantic import BaseModel
+from qdrant_client import models
 
 from app import config
-from app.ingest import COLLECTION, embed, get_qdrant
+from app.ingest import COLLECTION, DOCUMENTS, embed, get_qdrant
+from app.tools import CALCULATOR_TOOL, calculate
+from collections import Counter
 
+
+NUMBER = r"\d+(?:\.\d+)?"  # a number like 11512 or 21.4
+MIN_CHECKED = 1000  # smaller numbers are skipped, so 2, 100 and 365 stay allowed
+MAX_STEPS = 3  # most model calls for one question
+STATEMENT_K = 3  # chunks from each financial statement
+DOC_NAMES = {company: doc_name for doc_name, company, _ in DOCUMENTS}
 MAX_QUESTION_LENGTH = 500
-TOP_K = 20  # how many chunks the model gets per question
+TOP_K = 11  # how many chunks the model gets per question
+STATEMENT_QUERIES = [
+    "consolidated balance sheets total current assets inventories accounts receivable total current liabilities total assets",
+    "consolidated statements of operations income revenue cost of sales operating income net income",
+    "consolidated statements of cash flows depreciation and amortization capital expenditures net cash provided by operating activities",
+]
 ADVICE_DECLINE = (
     "I can't give investment advice. I can answer factual questions about the 10-K reports I have, "
     "for example a company's revenue, profit or risks."
@@ -18,12 +36,20 @@ INSTRUCTIONS = (
     "- Start with a direct conclusion (yes/no, the number, or the main drivers), then support it in 2-4 sentences "
     "with the specific numbers, names and reasons from the excerpts.\n"
     "- If the question needs a calculation (ratio, margin, turnover, growth, year-over-year change), "
-    "find the inputs in the excerpts, do the calculation, and show the formula and the inputs.\n"
+    "find the inputs in the excerpts, call the calculate tool, and show the formula and the inputs. "
+    "Never do arithmetic yourself. In figures, give a calculated value with source 0 and copy the tool's "
+    "result exactly; you may round it in the answer text.\n"
     "- Some questions say what to answer in a special case (for example, if a metric doesn't apply). "
     "Use that special answer only when the excerpts clearly show that case. "
     "If the inputs for the calculation are in the excerpts, calculate instead.\n"
     "- Say that the reports don't contain the answer only if the excerpts have nothing relevant. "
-    "Never make up a number that isn't in the excerpts.\n"
+    "Never replace a missing input with a different number.\n"
+    "- Use these definitions unless the question gives its own: "
+    "inventory turnover = cost of sales / average inventory; "
+    "quick ratio = (cash + short-term investments + receivables) / current liabilities; "
+    "return on assets = net income / average total assets; "
+    "EBITDA = operating income + depreciation and amortization; a net loss is a negative number.\n"
+    "- Do each calculation once. When you have the results you need, write your answer.\n"
     "Cite the excerpts you use in the answer, like [2]. "
     "List every number you use in figures, with source set to the number of the excerpt it comes from. "
     "Copy each value exactly as the report writes it (e.g. in millions if the table is in millions). "
@@ -61,6 +87,10 @@ class Source(BaseModel):
     page: int  # 0-indexed pypdf page, same as FinanceBench
     score: float # cosine similarity to the question
 
+class Calculation(BaseModel):
+    expression: str
+    result: float
+
 class AskResponse(Answer):
     """What the API returns: the model's answer plus our own checks."""
     sources: list[Source]
@@ -68,6 +98,7 @@ class AskResponse(Answer):
     input_tokens: int
     output_tokens: int
     cost_usd: float
+    calculations: list[Calculation] = []
 
 FALLBACK_ANSWER = AskResponse(
     answer="Sorry, I couldn't get an answer right now. Please try again in a moment.",
@@ -95,65 +126,156 @@ def number_in_text(value: float, text: str) -> bool:
     return any(candidate in text for candidate in candidates)
 
 
-def check_figures(result: Answer, chunks: list[dict]) -> list[str]:
-    """Return a warning for every figure whose excerpt doesn't exist or doesn't contain its number."""
+def check_figures(result: Answer, chunks: list[dict], calculations: list[Calculation]) -> list[str]:
+    """Return a warning for every figure that doesn't match its excerpt or a calculator result."""
     warnings = []
     for figure in result.figures:
-        if not 1 <= figure.source <= len(chunks):
+        if figure.source == 0:
+            if not any(math.isclose(figure.value, c.result, rel_tol=0.001) for c in calculations):
+                warnings.append(f"'{figure.name}' ({figure.value}) doesn't match any calculator result")
+        elif not 1 <= figure.source <= len(chunks):
             warnings.append(f"'{figure.name}' cites excerpt [{figure.source}], which doesn't exist")
         elif not number_in_text(figure.value, chunks[figure.source - 1]["text"]):
             warnings.append(f"'{figure.name}' ({figure.value}) not found in excerpt [{figure.source}]")
     return warnings
 
 
-def retrieve(question: str) -> list[dict]:
-    """Return the TOP_K chunks closest in meaning to the question, from all reports."""
+
+def retrieve(question: str, limit: int = TOP_K, company: str | None = None) -> list[dict]:
+    """Return the chunks closest in meaning to the question, from one company or from all reports."""
     vector = embed([question])[0]
-    hits = qdrant.query_points(COLLECTION, query=vector, limit=TOP_K).points
+    query_filter = None
+    if company:
+        query_filter = models.Filter(must=[
+            models.FieldCondition(key="doc_name", match=models.MatchValue(value=DOC_NAMES[company])),
+        ])
+    hits = qdrant.query_points(COLLECTION, query=vector, limit=limit, query_filter=query_filter).points
     return [{**hit.payload, "score": hit.score} for hit in hits]
 
 
-def format_excerpts(chunks: list[dict]) -> str:
+def format_excerpts(chunks: list[dict], start: int = 1) -> str:
     """Number the chunks like footnotes, each with its company, year and page."""
     return "\n\n".join(
         f"[{i}] {chunk['company']} {chunk['year']}, page {chunk['page']}\n{chunk['text']}"
-        for i, chunk in enumerate(chunks, start=1)
+        for i, chunk in enumerate(chunks, start=start)
     )
+
+def retrieve_context(question: str) -> list[dict]:
+    """Return the chunks closest to the question, plus the main financial statements of its company."""
+    top = retrieve(question, limit=20)
+    if not top:
+        return []
+    company = Counter(chunk["company"] for chunk in top).most_common(1)[0][0]  # the most common company
+
+    chunks = top[:TOP_K]
+    seen = {(chunk["doc_name"], chunk["page"], chunk["chunk"]) for chunk in chunks}
+    for query in STATEMENT_QUERIES:
+        for chunk in retrieve(query, limit=STATEMENT_K, company=company):
+            key = (chunk["doc_name"], chunk["page"], chunk["chunk"])
+            if key not in seen:
+                seen.add(key)
+                chunks.append(chunk)
+    return chunks
+
 
 # Done once, when the server starts, not on every question
 qdrant = get_qdrant()
 client = OpenAI(api_key=config.OPENAI_API_KEY, max_retries=3, timeout=45)
+
+
+def unknown_inputs(expression: str, chunks: list[dict], calculations: list[Calculation]) -> list[str]:
+    """Return the numbers in a calculation that aren't in the excerpts or earlier calculator results."""
+    text = " ".join(chunk["text"] for chunk in chunks).replace(",", "")  # 11,512 -> 11512
+    known = {float(number) for number in re.findall(NUMBER, text)}
+    unknown = []
+    for number in re.findall(NUMBER, expression):
+        value = float(number)
+        if value < MIN_CHECKED or value in known:
+            continue
+        if any(math.isclose(value, c.result, rel_tol=0.001) for c in calculations):
+            continue  # it comes from an earlier calculation
+        unknown.append(number)
+    return unknown
+
+
+def run_tool(call, chunks: list[dict], calculations: list[Calculation]) -> str:
+    """Run one tool the model asked for and return the text it gets back."""
+    expression = json.loads(call.arguments)["expression"]
+    unknown = unknown_inputs(expression, chunks, calculations)
+    if unknown:
+        print(f"rejected: {expression} ({', '.join(unknown)} not found)")
+        return (f"Error: {', '.join(unknown)} isn't in the excerpts or your earlier results. "
+                "Check the number and use the value exactly as the report writes it.")
+    try:
+        value = calculate(expression)
+    except (ValueError, SyntaxError, ZeroDivisionError) as error:
+        return f"Error: {error}"  # the model sees this and can fix its expression
+    calculations.append(Calculation(expression=expression, result=value))
+    print(f"calculate: {expression} = {value}")
+    return str(value)
+
+
+def run_agent(question: str, chunks: list[dict]):
+    """Call the model, running the tools it asks for, until it answers or MAX_STEPS runs out."""
+    messages = [{"role": "user", "content": f"Excerpts:\n\n{format_excerpts(chunks)}\n\nQuestion: {question}"}]
+    calculations = []
+    input_tokens = output_tokens = 0
+
+    for step in range(MAX_STEPS):
+        last_step = step == MAX_STEPS - 1
+        response = client.responses.parse(
+            model=config.OPENAI_MODEL,
+            instructions=INSTRUCTIONS,
+            input=messages,
+            tools=[CALCULATOR_TOOL],
+            tool_choice="none" if last_step else "auto",  # last step: must answer now
+            text_format=Answer,
+        )
+
+        input_tokens += response.usage.input_tokens
+        output_tokens += response.usage.output_tokens
+
+        tool_calls = [item for item in response.output if item.type == "function_call"]
+        if not tool_calls:  # the model is done
+            result = response.output_parsed
+            if last_step and result:
+                print("Forced an answer on the last step")
+                result.confidence = "low"
+            return result, calculations, input_tokens, output_tokens
+
+        for call in tool_calls:
+            messages.append({"type": "function_call", "call_id": call.call_id,
+                             "name": call.name, "arguments": call.arguments})
+            messages.append({"type": "function_call_output", "call_id": call.call_id,
+                             "output": run_tool(call, chunks, calculations)})
+
+    print(f"Agent stopped: no answer after {MAX_STEPS} steps")
+    return None, calculations, input_tokens, output_tokens
+
 
 def ask(question: str) -> AskResponse:
     """Answer one question from the 10-K reports. Always returns an AskResponse, even if a call fails."""
     result = None
     chunks = []
     try:
-        chunks = retrieve(question)
-        response = client.responses.parse(
-            model=config.OPENAI_MODEL,
-            instructions=INSTRUCTIONS,
-            input=f"Excerpts:\n\n{format_excerpts(chunks)}\n\nQuestion: {question}",
-            text_format=Answer,
-        )
-        result = response.output_parsed
+        chunks = retrieve_context(question)
+        result, calculations, input_tokens, output_tokens = run_agent(question, chunks)
     except APIError as error:
         print("API call failed: ", type(error).__name__)
 
-    if result is None:  # a call failed, or the model gave no usable answer
+    if result is None:  # a call failed, the model gave no usable answer, or it ran out of steps
         return FALLBACK_ANSWER
 
     # The question's embedding also costs money, but ~20 tokens × $0.02/1M ≈ $0.0000004, so we leave it out.
     price_in, price_out = PRICES[config.OPENAI_MODEL]
-    usage = response.usage
-    cost = (usage.input_tokens * price_in + usage.output_tokens * price_out) / 1_000_000
+    cost = (input_tokens * price_in + output_tokens * price_out) / 1_000_000
 
     if result.is_advice_request:
         result.answer = ADVICE_DECLINE
         result.figures = []
         chunks = []  # no sources for a declined question
 
-    warnings = check_figures(result, chunks)
+    warnings = check_figures(result, chunks, calculations)
     if warnings:
         result.confidence = "low"
 
@@ -166,7 +288,8 @@ def ask(question: str) -> AskResponse:
         **result.model_dump(),
         sources=sources,
         warnings=warnings,
-        input_tokens=usage.input_tokens,
-        output_tokens=usage.output_tokens,
+        input_tokens=input_tokens,
+        output_tokens=output_tokens,
         cost_usd=round(cost, 6),
+        calculations=calculations,
     )

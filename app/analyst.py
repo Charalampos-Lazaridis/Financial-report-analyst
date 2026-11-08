@@ -3,6 +3,7 @@ import math
 import re
 
 from typing import Literal
+from pathlib import Path
 
 from openai import APIError, OpenAI
 from pydantic import BaseModel
@@ -33,6 +34,8 @@ ADVICE_DECLINE = (
 INSTRUCTIONS = (
     "You are a financial analyst. Answer the question using only the numbered excerpts from 10-K reports. "
     "Each excerpt is labelled with its company, fiscal year and page.\n"
+    "- The last excerpt may be key figures from the company's SEC XBRL data, in millions of USD, for the "
+    "report's fiscal year and the year before. Prefer its values for those figures and cite it like any excerpt.\n"
     "- Start with a direct conclusion (yes/no, the number, or the main drivers), then support it in 2-4 sentences "
     "with the specific numbers, names and reasons from the excerpts.\n"
     "- If the question needs a calculation (ratio, margin, turnover, growth, year-over-year change), "
@@ -58,12 +61,11 @@ INSTRUCTIONS = (
     "Questions that ask for facts, metrics or calculations are not advice, "
     "even if they mention investors or an analyst's perspective."
 )
-
-
 PRICES = {
     "gpt-4o-mini": (0.15, 0.60),
     "gpt-4o": (2.50, 10.00),
 }
+KEY_FIGURES = json.loads(Path("data/key_figures.json").read_text(encoding="utf-8"))
 
 class Figure(BaseModel):
     name: str
@@ -84,7 +86,7 @@ class Source(BaseModel):
     id: int
     company: str
     year: int
-    page: int  # 0-indexed pypdf page, same as FinanceBench
+    page: int | None # 0-indexed pypdf page, same as FinanceBench
     score: float # cosine similarity to the question
 
 class Calculation(BaseModel):
@@ -154,11 +156,37 @@ def retrieve(question: str, limit: int = TOP_K, company: str | None = None) -> l
 
 
 def format_excerpts(chunks: list[dict], start: int = 1) -> str:
-    """Number the chunks like footnotes, each with its company, year and page."""
-    return "\n\n".join(
-        f"[{i}] {chunk['company']} {chunk['year']}, page {chunk['page']}\n{chunk['text']}"
-        for i, chunk in enumerate(chunks, start=start)
-    )
+    """Number the chunks like footnotes, each with its company, year and page (or SEC key figures)."""
+    parts = []
+    for i, chunk in enumerate(chunks, start=start):
+        where = "SEC XBRL key figures" if chunk["page"] is None else f"page {chunk['page']}"
+        parts.append(f"[{i}] {chunk['company']} {chunk['year']}, {where}\n{chunk['text']}")
+    return "\n\n".join(parts)
+
+
+def format_musd(value: float) -> str:
+    """Write a number the way a 10-K does: 86392.0 -> "86,392", -3547.0 -> "(3,547)"."""
+    text = f"{abs(value):,.1f}".removesuffix(".0")
+    return f"({text})" if value < 0 else text
+
+
+def key_figures_chunk(company: str) -> dict | None:
+    """The company's SEC XBRL key figures (this year and the year before) as one extra excerpt."""
+    doc_name = DOC_NAMES[company]
+    report = KEY_FIGURES.get(doc_name)
+    if not report:
+        return None
+    year = report["fiscal_year"]
+    lines = [f"Key figures from SEC XBRL data for the {company} 10-K, in millions of USD, for fiscal year {year} "
+             f"(period ending {report['period_end']}) and the year before. Negative values in parentheses."]
+    for name, figure in report["figures"].items():
+        line = f"{name}: FY{year} {format_musd(figure['value_musd'])}"
+        if figure.get("prior_musd") is not None:
+            line += f", FY{year - 1} {format_musd(figure['prior_musd'])}"
+        lines.append(f"{line}  [XBRL tag {figure['tag']}]")
+    return {"doc_name": doc_name, "company": company, "year": year,
+            "page": None, "chunk": "sec", "text": "\n".join(lines), "score": 0.0}
+
 
 def retrieve_context(question: str) -> list[dict]:
     """Return the chunks closest to the question, plus the main financial statements of its company."""
@@ -175,6 +203,9 @@ def retrieve_context(question: str) -> list[dict]:
             if key not in seen:
                 seen.add(key)
                 chunks.append(chunk)
+    sec = key_figures_chunk(company)
+    if sec:
+        chunks.append(sec)  # last, so the page excerpts keep their numbers
     return chunks
 
 

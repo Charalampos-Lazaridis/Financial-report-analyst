@@ -84,6 +84,28 @@ Notes on the two Unit 3 runs:
 - **One-word answers cost points:** #11 calculated 1.57 and answered only "Yes"; #32 also answered "Yes". The judge marks these wrong for missing the number or reason.
 - **Judge error:** #5 answered 9.54 against 9.5 and was marked wrong, although the judge's rules allow small rounding differences.
 
+**`sec_key_figures` (2026-11-08), 15-question subset, compared with `full_input_check` on the same questions (4/15):** `scripts/build_key_figures.py` downloads SEC XBRL data for the 12 reports and saves 19 key figures per report (revenue, operating income, D&A, current assets and liabilities, cash, receivables, inventory, capex and others; current fiscal year only, in millions) to `data/key_figures.json`. `retrieve_context` adds them as one extra excerpt at the end ("SEC XBRL key figures"), and the prompt says to prefer its values. Citations, `check_figures` and `unknown_inputs` treat it like any other excerpt. **8/15**, hit 13/15, cost $0.0368 + $0.0011 (was $0.0399 for answers in `statements_k11`). 0 fallbacks, 3 forced answers.
+
+- **The gain is mostly real:** 4 verdicts changed, all wrong → right, none the other way. Three used table numbers: #11 AMD quick ratio 1.57, #45 PepsiCo EBITDA margin 16.5%, #46 Verizon quick ratio 0.54 (every input from the table). #19 (AmEx geographies) didn't use the table and is noise.
+- **Misread inputs are caught and corrected:** #45 first tried operating profit 11,752; the input check rejected it and the model retried with the table's 11,512. #44 used the table's 11,512, 2,763 and 5,207 and reached $9,068M.
+- **By hand ≈ 9/15:** the judge again marks #5 (AES inventory turnover 9.54 vs 9.5) wrong.
+- **Still wrong:** #40 J&J inventory turnover used year-end inventory from the table (2.49) instead of the average of two years (reference 2.7). #7 Amcor quick ratio uses a different definition from the reference. #15 AMD chose investing ($1,999M) over operations ($3,565M) with both numbers in hand. #34 Boeing copies the 10-K's tax-rate signs, which are the reverse of the reference's. #17 answers only "Yes". #25 Best Buy mixes up years.
+
+**`sec_two_years` (2026-11-08), same 15 questions, compared with `sec_key_figures` (8/15):** the key-figures table now has the prior year next to the current one (`Inventory: FY2022 12,483, FY2021 10,387`), because every 10-K shows at least two years and averages, changes and growth need both. **6/15**, hit 13/15, cost $0.0402 + $0.0011 ($0.0368 before). 6 forced answers (3 before).
+
+- **The targeted gain happened:** #40 J&J inventory turnover now uses average inventory, 31,089 / ((12,483 + 10,387) / 2) = 2.72, matching the reference of 2.7.
+- **Losses don't come from the prior-year values:** #22 (AmEx tax rate) gives the same −3.0 points with no calculation, but leaves out the two rates, and the judge marks it wrong (wording). #6 (AES ROA) dropped the sign of net income (546 instead of (546)) and answered 0.04, which no calculation produced. #46 (Verizon quick ratio) first used 0 for receivables, then misread 24,506 as 24,332 and 24,306; the input check rejected both, and the forced answer was 0.052.
+- **Side effect: more calculations.** With two years in view, the model also calculates the prior year (#11 AMD current liabilities 4,240; #45 PepsiCo FY2021 margin 17.5%), uses up `MAX_STEPS`, and is forced to answer more often. Most forced answers were still correct.
+- **Definitions conflict again:** #5 AES now uses average inventory (12.1); its reference uses year-end inventory (9.5), while #40's uses the average. One definition can't match both.
+- 8/15 → 6/15 is within the noise seen on this subset (±2).
+
+**`sec_two_years_2` (2026-11-08), identical setup rerun to measure noise:** **7/15**, hit 13/15, $0.0376 + $0.0011, 4 forced answers. 5 verdicts changed between the two identical runs: #6, #22 and #46 became correct, and #11 and #40 became wrong.
+
+- **Noise confirmed:** two runs with no change in between differ by 5 verdicts out of 15. The 8 / 6 / 7 of the last three runs can't be told apart.
+- **#40 is a judge error:** "Roughly 2.72 times" against a reference of 2.7 is marked wrong, the same rounding strictness as #5 (9.54 vs 9.5). By hand this run is 8/15.
+- **#11 calculated the right number and reported another:** 1.57 with short-term investments was calculated, but the answer gave 1.41, from an earlier calculation without them. The same pattern was seen in `definitions` (#40, #45).
+- **Decision:** keep the two-year table (every 10-K shows two years; it fixed the average-inventory case) and close this step. Judge rounding errors go to Unit 5.
+
 ## `naive_k5`: baseline setup
 
 - Corpus: 12 10-Ks (11 FinanceBench + Apple 2025), pypdf page text, no cleanup

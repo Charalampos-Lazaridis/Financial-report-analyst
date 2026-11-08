@@ -1,0 +1,1554 @@
+{
+  "AAPL_10K_2025": {
+    "company": "Apple",
+    "fiscal_year": 2025,
+    "period_end": "2025-09-27",
+    "figures": {
+      "Revenue": {
+        "value_musd": 416161.0,
+        "period_end": "2025-09-27",
+        "prior_musd": 391035.0,
+        "prior_end": "2024-09-28",
+        "tag": "RevenueFromContractWithCustomerExcludingAssessedTax"
+      },
+      "Cost of revenue": {
+        "value_musd": 220960.0,
+        "period_end": "2025-09-27",
+        "prior_musd": 210352.0,
+        "prior_end": "2024-09-28",
+        "tag": "CostOfGoodsAndServicesSold"
+      },
+      "Operating income": {
+        "value_musd": 133050.0,
+        "period_end": "2025-09-27",
+        "prior_musd": 123216.0,
+        "prior_end": "2024-09-28",
+        "tag": "OperatingIncomeLoss"
+      },
+      "Net income": {
+        "value_musd": 112010.0,
+        "period_end": "2025-09-27",
+        "prior_musd": 93736.0,
+        "prior_end": "2024-09-28",
+        "tag": "NetIncomeLoss"
+      },
+      "Depreciation and amortization": {
+        "value_musd": 11698.0,
+        "period_end": "2025-09-27",
+        "prior_musd": 11445.0,
+        "prior_end": "2024-09-28",
+        "tag": "DepreciationDepletionAndAmortization"
+      },
+      "Total assets": {
+        "value_musd": 359241.0,
+        "period_end": "2025-09-27",
+        "prior_musd": 364980.0,
+        "prior_end": "2024-09-28",
+        "tag": "Assets"
+      },
+      "Current assets": {
+        "value_musd": 147957.0,
+        "period_end": "2025-09-27",
+        "prior_musd": 152987.0,
+        "prior_end": "2024-09-28",
+        "tag": "AssetsCurrent"
+      },
+      "Current liabilities": {
+        "value_musd": 165631.0,
+        "period_end": "2025-09-27",
+        "prior_musd": 176392.0,
+        "prior_end": "2024-09-28",
+        "tag": "LiabilitiesCurrent"
+      },
+      "Cash and cash equivalents": {
+        "value_musd": 35934.0,
+        "period_end": "2025-09-27",
+        "prior_musd": 29943.0,
+        "prior_end": "2024-09-28",
+        "tag": "CashAndCashEquivalentsAtCarryingValue"
+      },
+      "Accounts receivable": {
+        "value_musd": 39777.0,
+        "period_end": "2025-09-27",
+        "prior_musd": 33410.0,
+        "prior_end": "2024-09-28",
+        "tag": "AccountsReceivableNetCurrent"
+      },
+      "Inventory": {
+        "value_musd": 5718.0,
+        "period_end": "2025-09-27",
+        "prior_musd": 7286.0,
+        "prior_end": "2024-09-28",
+        "tag": "InventoryNet"
+      },
+      "Property, plant and equipment (net)": {
+        "value_musd": 49834.0,
+        "period_end": "2025-09-27",
+        "prior_musd": 45680.0,
+        "prior_end": "2024-09-28",
+        "tag": "PropertyPlantAndEquipmentNet"
+      },
+      "Total liabilities": {
+        "value_musd": 285508.0,
+        "period_end": "2025-09-27",
+        "prior_musd": 308030.0,
+        "prior_end": "2024-09-28",
+        "tag": "Liabilities"
+      },
+      "Shareholders' equity": {
+        "value_musd": 73733.0,
+        "period_end": "2025-09-27",
+        "prior_musd": 56950.0,
+        "prior_end": "2024-09-28",
+        "tag": "StockholdersEquity"
+      },
+      "Long-term debt": {
+        "value_musd": 78328.0,
+        "period_end": "2025-09-27",
+        "prior_musd": 85750.0,
+        "prior_end": "2024-09-28",
+        "tag": "LongTermDebtNoncurrent"
+      },
+      "Operating cash flow": {
+        "value_musd": 111482.0,
+        "period_end": "2025-09-27",
+        "prior_musd": 118254.0,
+        "prior_end": "2024-09-28",
+        "tag": "NetCashProvidedByUsedInOperatingActivities"
+      },
+      "Capital expenditure": {
+        "value_musd": 12715.0,
+        "period_end": "2025-09-27",
+        "prior_musd": 9447.0,
+        "prior_end": "2024-09-28",
+        "tag": "PaymentsToAcquirePropertyPlantAndEquipment"
+      },
+      "Dividends paid": {
+        "value_musd": 15421.0,
+        "period_end": "2025-09-27",
+        "prior_musd": 15234.0,
+        "prior_end": "2024-09-28",
+        "tag": "PaymentsOfDividends"
+      }
+    },
+    "missing": [
+      "Interest expense"
+    ]
+  },
+  "3M_2022_10K": {
+    "company": "3M",
+    "fiscal_year": 2022,
+    "period_end": "2022-12-31",
+    "figures": {
+      "Revenue": {
+        "value_musd": 34229.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 35355.0,
+        "prior_end": "2021-12-31",
+        "tag": "Revenues"
+      },
+      "Cost of revenue": {
+        "value_musd": 19232.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 18795.0,
+        "prior_end": "2021-12-31",
+        "tag": "CostOfRevenue"
+      },
+      "Operating income": {
+        "value_musd": 6539.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 7369.0,
+        "prior_end": "2021-12-31",
+        "tag": "OperatingIncomeLoss"
+      },
+      "Net income": {
+        "value_musd": 5777.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 5921.0,
+        "prior_end": "2021-12-31",
+        "tag": "NetIncomeLoss"
+      },
+      "Depreciation and amortization": {
+        "value_musd": 1831.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 1915.0,
+        "prior_end": "2021-12-31",
+        "tag": "DepreciationDepletionAndAmortization"
+      },
+      "Interest expense": {
+        "value_musd": 462.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 488.0,
+        "prior_end": "2021-12-31",
+        "tag": "InterestExpense"
+      },
+      "Total assets": {
+        "value_musd": 46455.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 47072.0,
+        "prior_end": "2021-12-31",
+        "tag": "Assets"
+      },
+      "Current assets": {
+        "value_musd": 14688.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 15403.0,
+        "prior_end": "2021-12-31",
+        "tag": "AssetsCurrent"
+      },
+      "Current liabilities": {
+        "value_musd": 9523.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 9035.0,
+        "prior_end": "2021-12-31",
+        "tag": "LiabilitiesCurrent"
+      },
+      "Accounts receivable": {
+        "value_musd": 4532.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 4660.0,
+        "prior_end": "2021-12-31",
+        "tag": "AccountsReceivableNetCurrent"
+      },
+      "Inventory": {
+        "value_musd": 5372.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 4985.0,
+        "prior_end": "2021-12-31",
+        "tag": "InventoryNet"
+      },
+      "Property, plant and equipment (net)": {
+        "value_musd": 9178.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 9429.0,
+        "prior_end": "2021-12-31",
+        "tag": "PropertyPlantAndEquipmentNet"
+      },
+      "Total liabilities": {
+        "value_musd": 31685.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 31955.0,
+        "prior_end": "2021-12-31",
+        "tag": "Liabilities"
+      },
+      "Shareholders' equity": {
+        "value_musd": 14722.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 15046.0,
+        "prior_end": "2021-12-31",
+        "tag": "StockholdersEquity"
+      },
+      "Long-term debt": {
+        "value_musd": 14001.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 16056.0,
+        "prior_end": "2021-12-31",
+        "tag": "LongTermDebtNoncurrent"
+      },
+      "Operating cash flow": {
+        "value_musd": 5591.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 7454.0,
+        "prior_end": "2021-12-31",
+        "tag": "NetCashProvidedByUsedInOperatingActivities"
+      },
+      "Capital expenditure": {
+        "value_musd": 1749.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 1603.0,
+        "prior_end": "2021-12-31",
+        "tag": "PaymentsToAcquirePropertyPlantAndEquipment"
+      },
+      "Dividends paid": {
+        "value_musd": 3369.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 3420.0,
+        "prior_end": "2021-12-31",
+        "tag": "PaymentsOfDividendsCommonStock"
+      }
+    },
+    "missing": [
+      "Cash and cash equivalents"
+    ]
+  },
+  "AES_2022_10K": {
+    "company": "AES Corporation",
+    "fiscal_year": 2022,
+    "period_end": "2022-12-31",
+    "figures": {
+      "Revenue": {
+        "value_musd": 12617.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 11141.0,
+        "prior_end": "2021-12-31",
+        "tag": "Revenues"
+      },
+      "Cost of revenue": {
+        "value_musd": 10069.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 8430.0,
+        "prior_end": "2021-12-31",
+        "tag": "CostOfGoodsAndServicesSold"
+      },
+      "Net income": {
+        "value_musd": -546.0,
+        "period_end": "2022-12-31",
+        "prior_musd": -409.0,
+        "prior_end": "2021-12-31",
+        "tag": "NetIncomeLoss"
+      },
+      "Depreciation and amortization": {
+        "value_musd": 1053.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 1056.0,
+        "prior_end": "2021-12-31",
+        "tag": "DepreciationAndAmortization"
+      },
+      "Interest expense": {
+        "value_musd": 1117.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 911.0,
+        "prior_end": "2021-12-31",
+        "tag": "InterestExpense"
+      },
+      "Total assets": {
+        "value_musd": 38363.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 32963.0,
+        "prior_end": "2021-12-31",
+        "tag": "Assets"
+      },
+      "Current assets": {
+        "value_musd": 7643.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 5356.0,
+        "prior_end": "2021-12-31",
+        "tag": "AssetsCurrent"
+      },
+      "Current liabilities": {
+        "value_musd": 6491.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 4732.0,
+        "prior_end": "2021-12-31",
+        "tag": "LiabilitiesCurrent"
+      },
+      "Cash and cash equivalents": {
+        "value_musd": 1374.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 943.0,
+        "prior_end": "2021-12-31",
+        "tag": "CashAndCashEquivalentsAtCarryingValue"
+      },
+      "Accounts receivable": {
+        "value_musd": 1799.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 1418.0,
+        "prior_end": "2021-12-31",
+        "tag": "AccountsReceivableNetCurrent"
+      },
+      "Inventory": {
+        "value_musd": 1055.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 604.0,
+        "prior_end": "2021-12-31",
+        "tag": "InventoryNet"
+      },
+      "Property, plant and equipment (net)": {
+        "value_musd": 23039.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 19906.0,
+        "prior_end": "2021-12-31",
+        "tag": "PropertyPlantAndEquipmentNet"
+      },
+      "Shareholders' equity": {
+        "value_musd": 2437.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 2798.0,
+        "prior_end": "2021-12-31",
+        "tag": "StockholdersEquity"
+      },
+      "Operating cash flow": {
+        "value_musd": 2715.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 1902.0,
+        "prior_end": "2021-12-31",
+        "tag": "NetCashProvidedByUsedInOperatingActivities"
+      },
+      "Capital expenditure": {
+        "value_musd": 4551.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 2116.0,
+        "prior_end": "2021-12-31",
+        "tag": "PaymentsToAcquirePropertyPlantAndEquipment"
+      },
+      "Dividends paid": {
+        "value_musd": 422.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 401.0,
+        "prior_end": "2021-12-31",
+        "tag": "PaymentsOfDividendsCommonStock"
+      }
+    },
+    "missing": [
+      "Operating income",
+      "Total liabilities",
+      "Long-term debt"
+    ]
+  },
+  "AMCOR_2023_10K": {
+    "company": "Amcor",
+    "fiscal_year": 2023,
+    "period_end": "2023-06-30",
+    "figures": {
+      "Revenue": {
+        "value_musd": 14694.0,
+        "period_end": "2023-06-30",
+        "prior_musd": 14544.0,
+        "prior_end": "2022-06-30",
+        "tag": "RevenueFromContractWithCustomerExcludingAssessedTax"
+      },
+      "Cost of revenue": {
+        "value_musd": 11969.0,
+        "period_end": "2023-06-30",
+        "prior_musd": 11724.0,
+        "prior_end": "2022-06-30",
+        "tag": "CostOfGoodsAndServicesSold"
+      },
+      "Operating income": {
+        "value_musd": 1508.0,
+        "period_end": "2023-06-30",
+        "prior_musd": 1239.0,
+        "prior_end": "2022-06-30",
+        "tag": "OperatingIncomeLoss"
+      },
+      "Net income": {
+        "value_musd": 1048.0,
+        "period_end": "2023-06-30",
+        "prior_musd": 805.0,
+        "prior_end": "2022-06-30",
+        "tag": "NetIncomeLoss"
+      },
+      "Depreciation and amortization": {
+        "value_musd": 586.0,
+        "period_end": "2023-06-30",
+        "prior_musd": 625.0,
+        "prior_end": "2022-06-30",
+        "tag": "DepreciationDepletionAndAmortization"
+      },
+      "Interest expense": {
+        "value_musd": 290.0,
+        "period_end": "2023-06-30",
+        "prior_musd": 159.0,
+        "prior_end": "2022-06-30",
+        "tag": "InterestExpense"
+      },
+      "Total assets": {
+        "value_musd": 17003.0,
+        "period_end": "2023-06-30",
+        "prior_musd": 17426.0,
+        "prior_end": "2022-06-30",
+        "tag": "Assets"
+      },
+      "Current assets": {
+        "value_musd": 5308.0,
+        "period_end": "2023-06-30",
+        "prior_musd": 5853.0,
+        "prior_end": "2022-06-30",
+        "tag": "AssetsCurrent"
+      },
+      "Current liabilities": {
+        "value_musd": 4476.0,
+        "period_end": "2023-06-30",
+        "prior_musd": 5103.0,
+        "prior_end": "2022-06-30",
+        "tag": "LiabilitiesCurrent"
+      },
+      "Cash and cash equivalents": {
+        "value_musd": 689.0,
+        "period_end": "2023-06-30",
+        "prior_musd": 775.0,
+        "prior_end": "2022-06-30",
+        "tag": "CashAndCashEquivalentsAtCarryingValue"
+      },
+      "Accounts receivable": {
+        "value_musd": 1875.0,
+        "period_end": "2023-06-30",
+        "prior_musd": 1935.0,
+        "prior_end": "2022-06-30",
+        "tag": "AccountsReceivableNetCurrent"
+      },
+      "Total liabilities": {
+        "value_musd": 12913.0,
+        "period_end": "2023-06-30",
+        "prior_musd": 13285.0,
+        "prior_end": "2022-06-30",
+        "tag": "Liabilities"
+      },
+      "Shareholders' equity": {
+        "value_musd": 4026.0,
+        "period_end": "2023-06-30",
+        "prior_musd": 4082.0,
+        "prior_end": "2022-06-30",
+        "tag": "StockholdersEquity"
+      },
+      "Long-term debt": {
+        "value_musd": 6653.0,
+        "period_end": "2023-06-30",
+        "prior_musd": 6340.0,
+        "prior_end": "2022-06-30",
+        "tag": "LongTermDebtAndCapitalLeaseObligations"
+      },
+      "Operating cash flow": {
+        "value_musd": 1261.0,
+        "period_end": "2023-06-30",
+        "prior_musd": 1526.0,
+        "prior_end": "2022-06-30",
+        "tag": "NetCashProvidedByUsedInOperatingActivities"
+      },
+      "Capital expenditure": {
+        "value_musd": 526.0,
+        "period_end": "2023-06-30",
+        "prior_musd": 527.0,
+        "prior_end": "2022-06-30",
+        "tag": "PaymentsToAcquireProductiveAssets"
+      },
+      "Dividends paid": {
+        "value_musd": 723.0,
+        "period_end": "2023-06-30",
+        "prior_musd": 732.0,
+        "prior_end": "2022-06-30",
+        "tag": "PaymentsOfDividendsCommonStock"
+      }
+    },
+    "missing": [
+      "Inventory",
+      "Property, plant and equipment (net)"
+    ]
+  },
+  "AMD_2022_10K": {
+    "company": "AMD",
+    "fiscal_year": 2022,
+    "period_end": "2022-12-31",
+    "figures": {
+      "Revenue": {
+        "value_musd": 23601.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 16434.0,
+        "prior_end": "2021-12-25",
+        "tag": "RevenueFromContractWithCustomerExcludingAssessedTax"
+      },
+      "Cost of revenue": {
+        "value_musd": 12998.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 8505.0,
+        "prior_end": "2021-12-25",
+        "tag": "CostOfGoodsAndServicesSold"
+      },
+      "Operating income": {
+        "value_musd": 1264.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 3648.0,
+        "prior_end": "2021-12-25",
+        "tag": "OperatingIncomeLoss"
+      },
+      "Net income": {
+        "value_musd": 1320.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 3162.0,
+        "prior_end": "2021-12-25",
+        "tag": "NetIncomeLoss"
+      },
+      "Interest expense": {
+        "value_musd": 88.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 34.0,
+        "prior_end": "2021-12-25",
+        "tag": "InterestExpense"
+      },
+      "Total assets": {
+        "value_musd": 67580.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 12419.0,
+        "prior_end": "2021-12-25",
+        "tag": "Assets"
+      },
+      "Current assets": {
+        "value_musd": 15019.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 8583.0,
+        "prior_end": "2021-12-25",
+        "tag": "AssetsCurrent"
+      },
+      "Current liabilities": {
+        "value_musd": 6369.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 4240.0,
+        "prior_end": "2021-12-25",
+        "tag": "LiabilitiesCurrent"
+      },
+      "Cash and cash equivalents": {
+        "value_musd": 4835.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 2535.0,
+        "prior_end": "2021-12-25",
+        "tag": "CashAndCashEquivalentsAtCarryingValue"
+      },
+      "Accounts receivable": {
+        "value_musd": 4126.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 2706.0,
+        "prior_end": "2021-12-25",
+        "tag": "AccountsReceivableNetCurrent"
+      },
+      "Inventory": {
+        "value_musd": 3771.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 1955.0,
+        "prior_end": "2021-12-25",
+        "tag": "InventoryNet"
+      },
+      "Property, plant and equipment (net)": {
+        "value_musd": 1513.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 702.0,
+        "prior_end": "2021-12-25",
+        "tag": "PropertyPlantAndEquipmentNet"
+      },
+      "Shareholders' equity": {
+        "value_musd": 54750.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 7497.0,
+        "prior_end": "2021-12-25",
+        "tag": "StockholdersEquity"
+      },
+      "Long-term debt": {
+        "value_musd": 2467.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 1.0,
+        "prior_end": "2021-12-25",
+        "tag": "LongTermDebtNoncurrent"
+      },
+      "Operating cash flow": {
+        "value_musd": 3565.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 3521.0,
+        "prior_end": "2021-12-25",
+        "tag": "NetCashProvidedByUsedInOperatingActivities"
+      },
+      "Capital expenditure": {
+        "value_musd": 450.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 301.0,
+        "prior_end": "2021-12-25",
+        "tag": "PaymentsToAcquirePropertyPlantAndEquipment"
+      }
+    },
+    "missing": [
+      "Depreciation and amortization",
+      "Total liabilities",
+      "Dividends paid"
+    ]
+  },
+  "AMERICANEXPRESS_2022_10K": {
+    "company": "American Express",
+    "fiscal_year": 2022,
+    "period_end": "2022-12-31",
+    "figures": {
+      "Revenue": {
+        "value_musd": 52862.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 42380.0,
+        "prior_end": "2021-12-31",
+        "tag": "RevenuesNetOfInterestExpense"
+      },
+      "Net income": {
+        "value_musd": 7514.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 8060.0,
+        "prior_end": "2021-12-31",
+        "tag": "NetIncomeLoss"
+      },
+      "Depreciation and amortization": {
+        "value_musd": 1626.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 1695.0,
+        "prior_end": "2021-12-31",
+        "tag": "DepreciationAmortizationAndAccretionNet"
+      },
+      "Interest expense": {
+        "value_musd": 2763.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 1283.0,
+        "prior_end": "2021-12-31",
+        "tag": "InterestExpense"
+      },
+      "Total assets": {
+        "value_musd": 228354.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 188548.0,
+        "prior_end": "2021-12-31",
+        "tag": "Assets"
+      },
+      "Property, plant and equipment (net)": {
+        "value_musd": 5215.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 4988.0,
+        "prior_end": "2021-12-31",
+        "tag": "PropertyPlantAndEquipmentNet"
+      },
+      "Total liabilities": {
+        "value_musd": 203643.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 166371.0,
+        "prior_end": "2021-12-31",
+        "tag": "Liabilities"
+      },
+      "Shareholders' equity": {
+        "value_musd": 24711.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 22177.0,
+        "prior_end": "2021-12-31",
+        "tag": "StockholdersEquity"
+      },
+      "Long-term debt": {
+        "value_musd": 42573.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 38675.0,
+        "prior_end": "2021-12-31",
+        "tag": "LongTermDebt"
+      },
+      "Operating cash flow": {
+        "value_musd": 21079.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 14645.0,
+        "prior_end": "2021-12-31",
+        "tag": "NetCashProvidedByUsedInOperatingActivities"
+      },
+      "Capital expenditure": {
+        "value_musd": 1855.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 1550.0,
+        "prior_end": "2021-12-31",
+        "tag": "PaymentsToAcquirePropertyPlantAndEquipment"
+      },
+      "Dividends paid": {
+        "value_musd": 1565.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 1448.0,
+        "prior_end": "2021-12-31",
+        "tag": "PaymentsOfDividends"
+      }
+    },
+    "missing": [
+      "Cost of revenue",
+      "Operating income",
+      "Current assets",
+      "Current liabilities",
+      "Cash and cash equivalents",
+      "Accounts receivable",
+      "Inventory"
+    ]
+  },
+  "BESTBUY_2023_10K": {
+    "company": "Best Buy",
+    "fiscal_year": 2023,
+    "period_end": "2023-01-28",
+    "figures": {
+      "Revenue": {
+        "value_musd": 46298.0,
+        "period_end": "2023-01-28",
+        "prior_musd": 51761.0,
+        "prior_end": "2022-01-29",
+        "tag": "Revenues"
+      },
+      "Cost of revenue": {
+        "value_musd": 36386.0,
+        "period_end": "2023-01-28",
+        "prior_musd": 40121.0,
+        "prior_end": "2022-01-29",
+        "tag": "CostOfGoodsAndServicesSold"
+      },
+      "Operating income": {
+        "value_musd": 1795.0,
+        "period_end": "2023-01-28",
+        "prior_musd": 3039.0,
+        "prior_end": "2022-01-29",
+        "tag": "OperatingIncomeLoss"
+      },
+      "Net income": {
+        "value_musd": 1419.0,
+        "period_end": "2023-01-28",
+        "prior_musd": 2454.0,
+        "prior_end": "2022-01-29",
+        "tag": "NetIncomeLoss"
+      },
+      "Depreciation and amortization": {
+        "value_musd": 918.0,
+        "period_end": "2023-01-28",
+        "prior_musd": 869.0,
+        "prior_end": "2022-01-29",
+        "tag": "DepreciationDepletionAndAmortization"
+      },
+      "Interest expense": {
+        "value_musd": 35.0,
+        "period_end": "2023-01-28",
+        "prior_musd": 25.0,
+        "prior_end": "2022-01-29",
+        "tag": "InterestExpense"
+      },
+      "Total assets": {
+        "value_musd": 15803.0,
+        "period_end": "2023-01-28",
+        "prior_musd": 17504.0,
+        "prior_end": "2022-01-29",
+        "tag": "Assets"
+      },
+      "Current assets": {
+        "value_musd": 8802.0,
+        "period_end": "2023-01-28",
+        "prior_musd": 10539.0,
+        "prior_end": "2022-01-29",
+        "tag": "AssetsCurrent"
+      },
+      "Current liabilities": {
+        "value_musd": 8979.0,
+        "period_end": "2023-01-28",
+        "prior_musd": 10674.0,
+        "prior_end": "2022-01-29",
+        "tag": "LiabilitiesCurrent"
+      },
+      "Cash and cash equivalents": {
+        "value_musd": 1874.0,
+        "period_end": "2023-01-28",
+        "prior_musd": 2936.0,
+        "prior_end": "2022-01-29",
+        "tag": "CashAndCashEquivalentsAtCarryingValue"
+      },
+      "Accounts receivable": {
+        "value_musd": 1141.0,
+        "period_end": "2023-01-28",
+        "prior_musd": 1042.0,
+        "prior_end": "2022-01-29",
+        "tag": "ReceivablesNetCurrent"
+      },
+      "Inventory": {
+        "value_musd": 5140.0,
+        "period_end": "2023-01-28",
+        "prior_musd": 5965.0,
+        "prior_end": "2022-01-29",
+        "tag": "InventoryNet"
+      },
+      "Property, plant and equipment (net)": {
+        "value_musd": 2352.0,
+        "period_end": "2023-01-28",
+        "prior_musd": 2250.0,
+        "prior_end": "2022-01-29",
+        "tag": "PropertyPlantAndEquipmentNet"
+      },
+      "Shareholders' equity": {
+        "value_musd": 2795.0,
+        "period_end": "2023-01-28",
+        "prior_musd": 3020.0,
+        "prior_end": "2022-01-29",
+        "tag": "StockholdersEquity"
+      },
+      "Long-term debt": {
+        "value_musd": 1160.0,
+        "period_end": "2023-01-28",
+        "prior_musd": 1216.0,
+        "prior_end": "2022-01-29",
+        "tag": "LongTermDebtNoncurrent"
+      },
+      "Operating cash flow": {
+        "value_musd": 1824.0,
+        "period_end": "2023-01-28",
+        "prior_musd": 3252.0,
+        "prior_end": "2022-01-29",
+        "tag": "NetCashProvidedByUsedInOperatingActivities"
+      },
+      "Capital expenditure": {
+        "value_musd": 930.0,
+        "period_end": "2023-01-28",
+        "prior_musd": 737.0,
+        "prior_end": "2022-01-29",
+        "tag": "PaymentsToAcquirePropertyPlantAndEquipment"
+      },
+      "Dividends paid": {
+        "value_musd": 789.0,
+        "period_end": "2023-01-28",
+        "prior_musd": 688.0,
+        "prior_end": "2022-01-29",
+        "tag": "PaymentsOfDividends"
+      }
+    },
+    "missing": [
+      "Total liabilities"
+    ]
+  },
+  "BOEING_2022_10K": {
+    "company": "Boeing",
+    "fiscal_year": 2022,
+    "period_end": "2022-12-31",
+    "figures": {
+      "Revenue": {
+        "value_musd": 66608.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 62286.0,
+        "prior_end": "2021-12-31",
+        "tag": "Revenues"
+      },
+      "Cost of revenue": {
+        "value_musd": 63106.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 59269.0,
+        "prior_end": "2021-12-31",
+        "tag": "CostOfRevenue"
+      },
+      "Operating income": {
+        "value_musd": -3547.0,
+        "period_end": "2022-12-31",
+        "prior_musd": -2902.0,
+        "prior_end": "2021-12-31",
+        "tag": "OperatingIncomeLoss"
+      },
+      "Net income": {
+        "value_musd": -4935.0,
+        "period_end": "2022-12-31",
+        "prior_musd": -4202.0,
+        "prior_end": "2021-12-31",
+        "tag": "NetIncomeLoss"
+      },
+      "Depreciation and amortization": {
+        "value_musd": 1979.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 2144.0,
+        "prior_end": "2021-12-31",
+        "tag": "DepreciationDepletionAndAmortization"
+      },
+      "Interest expense": {
+        "value_musd": 2533.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 2682.0,
+        "prior_end": "2021-12-31",
+        "tag": "InterestAndDebtExpense"
+      },
+      "Total assets": {
+        "value_musd": 137100.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 138552.0,
+        "prior_end": "2021-12-31",
+        "tag": "Assets"
+      },
+      "Current assets": {
+        "value_musd": 109523.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 108666.0,
+        "prior_end": "2021-12-31",
+        "tag": "AssetsCurrent"
+      },
+      "Current liabilities": {
+        "value_musd": 90052.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 81992.0,
+        "prior_end": "2021-12-31",
+        "tag": "LiabilitiesCurrent"
+      },
+      "Cash and cash equivalents": {
+        "value_musd": 14614.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 8052.0,
+        "prior_end": "2021-12-31",
+        "tag": "CashAndCashEquivalentsAtCarryingValue"
+      },
+      "Accounts receivable": {
+        "value_musd": 2517.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 2641.0,
+        "prior_end": "2021-12-31",
+        "tag": "AccountsReceivableNetCurrent"
+      },
+      "Property, plant and equipment (net)": {
+        "value_musd": 10550.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 10918.0,
+        "prior_end": "2021-12-31",
+        "tag": "PropertyPlantAndEquipmentNet"
+      },
+      "Total liabilities": {
+        "value_musd": 152948.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 153398.0,
+        "prior_end": "2021-12-31",
+        "tag": "Liabilities"
+      },
+      "Shareholders' equity": {
+        "value_musd": -15883.0,
+        "period_end": "2022-12-31",
+        "prior_musd": -14999.0,
+        "prior_end": "2021-12-31",
+        "tag": "StockholdersEquity"
+      },
+      "Long-term debt": {
+        "value_musd": 56794.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 57921.0,
+        "prior_end": "2021-12-31",
+        "tag": "LongTermDebt"
+      },
+      "Operating cash flow": {
+        "value_musd": 3512.0,
+        "period_end": "2022-12-31",
+        "prior_musd": -3416.0,
+        "prior_end": "2021-12-31",
+        "tag": "NetCashProvidedByUsedInOperatingActivities"
+      },
+      "Capital expenditure": {
+        "value_musd": 1222.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 980.0,
+        "prior_end": "2021-12-31",
+        "tag": "PaymentsToAcquirePropertyPlantAndEquipment"
+      }
+    },
+    "missing": [
+      "Inventory",
+      "Dividends paid"
+    ]
+  },
+  "CVSHEALTH_2022_10K": {
+    "company": "CVS Health",
+    "fiscal_year": 2022,
+    "period_end": "2022-12-31",
+    "figures": {
+      "Revenue": {
+        "value_musd": 322467.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 292111.0,
+        "prior_end": "2021-12-31",
+        "tag": "Revenues"
+      },
+      "Cost of revenue": {
+        "value_musd": 196892.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 175803.0,
+        "prior_end": "2021-12-31",
+        "tag": "CostOfGoodsAndServicesSold"
+      },
+      "Operating income": {
+        "value_musd": 7746.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 13193.0,
+        "prior_end": "2021-12-31",
+        "tag": "OperatingIncomeLoss"
+      },
+      "Net income": {
+        "value_musd": 4149.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 7910.0,
+        "prior_end": "2021-12-31",
+        "tag": "NetIncomeLoss"
+      },
+      "Depreciation and amortization": {
+        "value_musd": 4247.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 4512.0,
+        "prior_end": "2021-12-31",
+        "tag": "DepreciationDepletionAndAmortization"
+      },
+      "Interest expense": {
+        "value_musd": 2287.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 2503.0,
+        "prior_end": "2021-12-31",
+        "tag": "InterestExpense"
+      },
+      "Total assets": {
+        "value_musd": 228275.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 232999.0,
+        "prior_end": "2021-12-31",
+        "tag": "Assets"
+      },
+      "Current assets": {
+        "value_musd": 65682.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 60008.0,
+        "prior_end": "2021-12-31",
+        "tag": "AssetsCurrent"
+      },
+      "Current liabilities": {
+        "value_musd": 69736.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 67807.0,
+        "prior_end": "2021-12-31",
+        "tag": "LiabilitiesCurrent"
+      },
+      "Cash and cash equivalents": {
+        "value_musd": 12945.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 9408.0,
+        "prior_end": "2021-12-31",
+        "tag": "CashAndCashEquivalentsAtCarryingValue"
+      },
+      "Accounts receivable": {
+        "value_musd": 27276.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 24431.0,
+        "prior_end": "2021-12-31",
+        "tag": "AccountsReceivableNetCurrent"
+      },
+      "Inventory": {
+        "value_musd": 19090.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 17760.0,
+        "prior_end": "2021-12-31",
+        "tag": "InventoryNet"
+      },
+      "Property, plant and equipment (net)": {
+        "value_musd": 12873.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 12896.0,
+        "prior_end": "2021-12-31",
+        "tag": "PropertyPlantAndEquipmentNet"
+      },
+      "Total liabilities": {
+        "value_musd": 156960.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 157618.0,
+        "prior_end": "2021-12-31",
+        "tag": "Liabilities"
+      },
+      "Shareholders' equity": {
+        "value_musd": 71015.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 75075.0,
+        "prior_end": "2021-12-31",
+        "tag": "StockholdersEquity"
+      },
+      "Long-term debt": {
+        "value_musd": 50476.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 51971.0,
+        "prior_end": "2021-12-31",
+        "tag": "LongTermDebtAndCapitalLeaseObligations"
+      },
+      "Operating cash flow": {
+        "value_musd": 16177.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 18265.0,
+        "prior_end": "2021-12-31",
+        "tag": "NetCashProvidedByUsedInOperatingActivities"
+      },
+      "Capital expenditure": {
+        "value_musd": 2727.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 2520.0,
+        "prior_end": "2021-12-31",
+        "tag": "PaymentsToAcquirePropertyPlantAndEquipment"
+      },
+      "Dividends paid": {
+        "value_musd": 2907.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 2625.0,
+        "prior_end": "2021-12-31",
+        "tag": "PaymentsOfDividends"
+      }
+    },
+    "missing": []
+  },
+  "JOHNSON_JOHNSON_2022_10K": {
+    "company": "Johnson & Johnson",
+    "fiscal_year": 2022,
+    "period_end": "2023-01-01",
+    "figures": {
+      "Revenue": {
+        "value_musd": 94943.0,
+        "period_end": "2023-01-01",
+        "prior_musd": 93775.0,
+        "prior_end": "2022-01-02",
+        "tag": "RevenueFromContractWithCustomerExcludingAssessedTax"
+      },
+      "Cost of revenue": {
+        "value_musd": 31089.0,
+        "period_end": "2023-01-01",
+        "prior_musd": 29855.0,
+        "prior_end": "2022-01-02",
+        "tag": "CostOfGoodsAndServicesSold"
+      },
+      "Net income": {
+        "value_musd": 17941.0,
+        "period_end": "2023-01-01",
+        "prior_musd": 20878.0,
+        "prior_end": "2022-01-02",
+        "tag": "NetIncomeLoss"
+      },
+      "Depreciation and amortization": {
+        "value_musd": 6970.0,
+        "period_end": "2023-01-01",
+        "prior_musd": 7390.0,
+        "prior_end": "2022-01-02",
+        "tag": "DepreciationDepletionAndAmortization"
+      },
+      "Interest expense": {
+        "value_musd": 276.0,
+        "period_end": "2023-01-01",
+        "prior_musd": 183.0,
+        "prior_end": "2022-01-02",
+        "tag": "InterestExpense"
+      },
+      "Total assets": {
+        "value_musd": 187378.0,
+        "period_end": "2023-01-01",
+        "prior_musd": 182018.0,
+        "prior_end": "2022-01-02",
+        "tag": "Assets"
+      },
+      "Current assets": {
+        "value_musd": 55294.0,
+        "period_end": "2023-01-01",
+        "prior_musd": 60979.0,
+        "prior_end": "2022-01-02",
+        "tag": "AssetsCurrent"
+      },
+      "Current liabilities": {
+        "value_musd": 55802.0,
+        "period_end": "2023-01-01",
+        "prior_musd": 45226.0,
+        "prior_end": "2022-01-02",
+        "tag": "LiabilitiesCurrent"
+      },
+      "Cash and cash equivalents": {
+        "value_musd": 14127.0,
+        "period_end": "2023-01-01",
+        "prior_musd": 14487.0,
+        "prior_end": "2022-01-02",
+        "tag": "CashAndCashEquivalentsAtCarryingValue"
+      },
+      "Accounts receivable": {
+        "value_musd": 16160.0,
+        "period_end": "2023-01-01",
+        "prior_musd": 15283.0,
+        "prior_end": "2022-01-02",
+        "tag": "AccountsReceivableNetCurrent"
+      },
+      "Inventory": {
+        "value_musd": 12483.0,
+        "period_end": "2023-01-01",
+        "prior_musd": 10387.0,
+        "prior_end": "2022-01-02",
+        "tag": "InventoryNet"
+      },
+      "Property, plant and equipment (net)": {
+        "value_musd": 19803.0,
+        "period_end": "2023-01-01",
+        "prior_musd": 18962.0,
+        "prior_end": "2022-01-02",
+        "tag": "PropertyPlantAndEquipmentNet"
+      },
+      "Total liabilities": {
+        "value_musd": 110574.0,
+        "period_end": "2023-01-01",
+        "prior_musd": 107995.0,
+        "prior_end": "2022-01-02",
+        "tag": "Liabilities"
+      },
+      "Shareholders' equity": {
+        "value_musd": 76804.0,
+        "period_end": "2023-01-01",
+        "prior_musd": 74023.0,
+        "prior_end": "2022-01-02",
+        "tag": "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest"
+      },
+      "Long-term debt": {
+        "value_musd": 26888.0,
+        "period_end": "2023-01-01",
+        "prior_musd": 29985.0,
+        "prior_end": "2022-01-02",
+        "tag": "LongTermDebtNoncurrent"
+      },
+      "Operating cash flow": {
+        "value_musd": 21194.0,
+        "period_end": "2023-01-01",
+        "prior_musd": 23410.0,
+        "prior_end": "2022-01-02",
+        "tag": "NetCashProvidedByUsedInOperatingActivities"
+      },
+      "Capital expenditure": {
+        "value_musd": 4009.0,
+        "period_end": "2023-01-01",
+        "prior_musd": 3652.0,
+        "prior_end": "2022-01-02",
+        "tag": "PaymentsToAcquirePropertyPlantAndEquipment"
+      }
+    },
+    "missing": [
+      "Operating income",
+      "Dividends paid"
+    ]
+  },
+  "PEPSICO_2022_10K": {
+    "company": "PepsiCo",
+    "fiscal_year": 2022,
+    "period_end": "2022-12-31",
+    "figures": {
+      "Revenue": {
+        "value_musd": 86392.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 79474.0,
+        "prior_end": "2021-12-25",
+        "tag": "Revenues"
+      },
+      "Cost of revenue": {
+        "value_musd": 40576.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 37075.0,
+        "prior_end": "2021-12-25",
+        "tag": "CostOfGoodsAndServicesSold"
+      },
+      "Operating income": {
+        "value_musd": 11512.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 11162.0,
+        "prior_end": "2021-12-25",
+        "tag": "OperatingIncomeLoss"
+      },
+      "Net income": {
+        "value_musd": 8910.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 7618.0,
+        "prior_end": "2021-12-25",
+        "tag": "NetIncomeLoss"
+      },
+      "Depreciation and amortization": {
+        "value_musd": 2763.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 2710.0,
+        "prior_end": "2021-12-25",
+        "tag": "DepreciationDepletionAndAmortization"
+      },
+      "Interest expense": {
+        "value_musd": 939.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 1863.0,
+        "prior_end": "2021-12-25",
+        "tag": "InterestExpense"
+      },
+      "Total assets": {
+        "value_musd": 92187.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 92377.0,
+        "prior_end": "2021-12-25",
+        "tag": "Assets"
+      },
+      "Current assets": {
+        "value_musd": 21539.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 21783.0,
+        "prior_end": "2021-12-25",
+        "tag": "AssetsCurrent"
+      },
+      "Current liabilities": {
+        "value_musd": 26785.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 26220.0,
+        "prior_end": "2021-12-25",
+        "tag": "LiabilitiesCurrent"
+      },
+      "Cash and cash equivalents": {
+        "value_musd": 4954.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 5596.0,
+        "prior_end": "2021-12-25",
+        "tag": "CashAndCashEquivalentsAtCarryingValue"
+      },
+      "Accounts receivable": {
+        "value_musd": 10163.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 8680.0,
+        "prior_end": "2021-12-25",
+        "tag": "AccountsNotesAndLoansReceivableNetCurrent"
+      },
+      "Inventory": {
+        "value_musd": 5222.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 4347.0,
+        "prior_end": "2021-12-25",
+        "tag": "InventoryNet"
+      },
+      "Property, plant and equipment (net)": {
+        "value_musd": 24291.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 22407.0,
+        "prior_end": "2021-12-25",
+        "tag": "PropertyPlantAndEquipmentNet"
+      },
+      "Total liabilities": {
+        "value_musd": 74914.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 76226.0,
+        "prior_end": "2021-12-25",
+        "tag": "Liabilities"
+      },
+      "Shareholders' equity": {
+        "value_musd": 17149.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 16043.0,
+        "prior_end": "2021-12-25",
+        "tag": "StockholdersEquity"
+      },
+      "Long-term debt": {
+        "value_musd": 35657.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 36026.0,
+        "prior_end": "2021-12-25",
+        "tag": "LongTermDebtNoncurrent"
+      },
+      "Operating cash flow": {
+        "value_musd": 10811.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 11616.0,
+        "prior_end": "2021-12-25",
+        "tag": "NetCashProvidedByUsedInOperatingActivities"
+      },
+      "Capital expenditure": {
+        "value_musd": 5207.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 4625.0,
+        "prior_end": "2021-12-25",
+        "tag": "PaymentsToAcquireProductiveAssets"
+      },
+      "Dividends paid": {
+        "value_musd": 6172.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 5815.0,
+        "prior_end": "2021-12-25",
+        "tag": "PaymentsOfDividends"
+      }
+    },
+    "missing": []
+  },
+  "VERIZON_2022_10K": {
+    "company": "Verizon",
+    "fiscal_year": 2022,
+    "period_end": "2022-12-31",
+    "figures": {
+      "Revenue": {
+        "value_musd": 136835.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 133613.0,
+        "prior_end": "2021-12-31",
+        "tag": "Revenues"
+      },
+      "Operating income": {
+        "value_musd": 30467.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 32448.0,
+        "prior_end": "2021-12-31",
+        "tag": "OperatingIncomeLoss"
+      },
+      "Net income": {
+        "value_musd": 21256.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 22065.0,
+        "prior_end": "2021-12-31",
+        "tag": "NetIncomeLoss"
+      },
+      "Depreciation and amortization": {
+        "value_musd": 17099.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 16206.0,
+        "prior_end": "2021-12-31",
+        "tag": "DepreciationAndAmortization"
+      },
+      "Interest expense": {
+        "value_musd": 3613.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 3485.0,
+        "prior_end": "2021-12-31",
+        "tag": "InterestExpense"
+      },
+      "Total assets": {
+        "value_musd": 379680.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 366596.0,
+        "prior_end": "2021-12-31",
+        "tag": "Assets"
+      },
+      "Current assets": {
+        "value_musd": 37857.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 36728.0,
+        "prior_end": "2021-12-31",
+        "tag": "AssetsCurrent"
+      },
+      "Current liabilities": {
+        "value_musd": 50171.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 47160.0,
+        "prior_end": "2021-12-31",
+        "tag": "LiabilitiesCurrent"
+      },
+      "Cash and cash equivalents": {
+        "value_musd": 2605.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 2921.0,
+        "prior_end": "2021-12-31",
+        "tag": "CashAndCashEquivalentsAtCarryingValue"
+      },
+      "Accounts receivable": {
+        "value_musd": 24506.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 23846.0,
+        "prior_end": "2021-12-31",
+        "tag": "AccountsNotesAndLoansReceivableNetCurrent"
+      },
+      "Inventory": {
+        "value_musd": 2388.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 3055.0,
+        "prior_end": "2021-12-31",
+        "tag": "InventoryNet"
+      },
+      "Property, plant and equipment (net)": {
+        "value_musd": 107434.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 99696.0,
+        "prior_end": "2021-12-31",
+        "tag": "PropertyPlantAndEquipmentNet"
+      },
+      "Shareholders' equity": {
+        "value_musd": 92463.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 83200.0,
+        "prior_end": "2021-12-31",
+        "tag": "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest"
+      },
+      "Long-term debt": {
+        "value_musd": 140676.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 143425.0,
+        "prior_end": "2021-12-31",
+        "tag": "LongTermDebtAndCapitalLeaseObligations"
+      },
+      "Operating cash flow": {
+        "value_musd": 37141.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 39539.0,
+        "prior_end": "2021-12-31",
+        "tag": "NetCashProvidedByUsedInOperatingActivities"
+      },
+      "Dividends paid": {
+        "value_musd": 10805.0,
+        "period_end": "2022-12-31",
+        "prior_musd": 10445.0,
+        "prior_end": "2021-12-31",
+        "tag": "PaymentsOfDividends"
+      }
+    },
+    "missing": [
+      "Cost of revenue",
+      "Total liabilities",
+      "Capital expenditure"
+    ]
+  }
+}

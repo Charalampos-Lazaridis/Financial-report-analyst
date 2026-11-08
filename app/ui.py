@@ -55,7 +55,8 @@ if st.button("Ask"):
     sources = result["sources"]
     if sources:
         rows = [
-            {"excerpt": s["id"], "company": s["company"], "year": s["year"], "PDF page": s["page"] + 1}
+            {"excerpt": s["id"], "company": s["company"], "year": s["year"],
+             "PDF page": "SEC XBRL" if s["page"] is None else str(s["page"] + 1)}
             for s in sources
         ]
         st.subheader("Sources")

@@ -24,3 +24,7 @@ EMBEDDING_MODEL = "text-embedding-3-small"
 QDRANT_URL = os.getenv("QDRANT_URL")
 QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
 QDRANT_PATH = "qdrant_data"
+
+# SEC EDGAR asks every request to say who is asking ("Name email"). Only needed on the laptop,
+# for scripts/build_key_figures.py, so it's optional here.
+SEC_USER_AGENT = os.getenv("SEC_USER_AGENT")

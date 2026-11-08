@@ -9,7 +9,7 @@ from pydantic import BaseModel
 from app import config
 from app.analyst import FALLBACK_ANSWER, PRICES, TOP_K, ask, qdrant
 
-RUN_NAME = "full_input_check"  # change this for each experiment so results files don't overwrite each other
+RUN_NAME = "sec_two_years_2"  # change this for each experiment so results files don't overwrite each other
 QUESTIONS = [5, 6, 7, 11, 15, 17, 19, 22, 25, 34, 40, 43, 44, 45, 46]  # None = all 48
 REJUDGE_FROM = None  # None = run ask() again; a path = only re-grade those saved answers
 JUDGE_MODEL = "gpt-4o-mini"

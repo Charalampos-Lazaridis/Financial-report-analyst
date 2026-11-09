@@ -52,6 +52,7 @@ if st.button("Ask"):
     # Show the excerpts the answer actually cites ([2] in the text, or a figure's source), not all 20.
     cited = {int(n) for n in re.findall(r"\[(\d+)\]", result["answer"])}
     cited |= {figure["source"] for figure in result["figures"]}
+
     sources = result["sources"]
     if sources:
         rows = [
@@ -63,3 +64,8 @@ if st.button("Ask"):
         st.table([row for row in rows if row["excerpt"] in cited] or rows[:5])
         with st.expander(f"All {len(rows)} retrieved excerpts"):
             st.table(rows)
+
+    steps = result.get("steps", [])  # .get: an older API version has no steps
+    if steps:
+        with st.expander("How I got this answer"):
+            st.markdown("\n".join(f"- {s}" for s in steps))

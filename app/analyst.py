@@ -1,6 +1,9 @@
 import json
 import math
 import re
+import ast
+import asyncio
+from functools import cache
 
 from typing import Literal
 from pathlib import Path
@@ -8,16 +11,18 @@ from pathlib import Path
 from openai import APIError, OpenAI
 from pydantic import BaseModel
 from qdrant_client import models
+from fastmcp import Client
 
 from app import config
 from app.ingest import COLLECTION, DOCUMENTS, embed, get_qdrant
 from app.tools import CALCULATOR_TOOL, calculate
+from app.sec_mcp_server import mcp as sec_server
 from collections import Counter
 
 
 NUMBER = r"\d+(?:\.\d+)?"  # a number like 11512 or 21.4
 MIN_CHECKED = 1000  # smaller numbers are skipped, so 2, 100 and 365 stay allowed
-MAX_STEPS = 3  # most model calls for one question
+MAX_STEPS = 4  # most model calls for one question
 STATEMENT_K = 3  # chunks from each financial statement
 DOC_NAMES = {company: doc_name for doc_name, company, _ in DOCUMENTS}
 MAX_QUESTION_LENGTH = 500
@@ -36,6 +41,8 @@ INSTRUCTIONS = (
     "Each excerpt is labelled with its company, fiscal year and page.\n"
     "- The last excerpt may be key figures from the company's SEC XBRL data, in millions of USD, for the "
     "report's fiscal year and the year before. Prefer its values for those figures and cite it like any excerpt.\n"
+    "- If a number you need isn't in the excerpts (for example an earlier year, or a figure missing from the "
+    "key figures), look it up with get_sec_fact, then cite the excerpt number it returns.\n"
     "- Start with a direct conclusion (yes/no, the number, or the main drivers), then support it in 2-4 sentences "
     "with the specific numbers, names and reasons from the excerpts.\n"
     "- If the question needs a calculation (ratio, margin, turnover, growth, year-over-year change), "
@@ -101,6 +108,7 @@ class AskResponse(Answer):
     output_tokens: int
     cost_usd: float
     calculations: list[Calculation] = []
+    steps: list[str] = []  # what the agent did, in order, for the UI
 
 FALLBACK_ANSWER = AskResponse(
     answer="Sorry, I couldn't get an answer right now. Please try again in a moment.",
@@ -128,16 +136,43 @@ def number_in_text(value: float, text: str) -> bool:
     return any(candidate in text for candidate in candidates)
 
 
+def calculator_values(calculations: list[Calculation]) -> list[float]:
+    """Every value the calculator produced, including the parts of each expression:
+    (11512 + 2763) / 86392 gives 0.1652, and also 14275 from the part in brackets."""
+    values = [c.result for c in calculations]
+    for c in calculations:
+        for node in ast.walk(ast.parse(c.expression, mode="eval")):
+            if isinstance(node, ast.BinOp):  # one operation, e.g. 11512 + 2763
+                try:
+                    values.append(calculate(ast.unparse(node)))
+                except (ValueError, SyntaxError, ZeroDivisionError):
+                    pass
+    return values
+
+
+def matches_calculation(value: float, results: list[float]) -> bool:
+    """True if value is a calculator result, also when rounded (0.165 for 0.16524) or as a percent (16.52)."""
+    text = f"{value}"
+    decimals = len(text.split(".")[1]) if "." in text else 0  # 0.165 -> 3
+    for result in results:
+        for candidate in (result, result * 100):
+            if math.isclose(value, candidate, rel_tol=0.001) or round(candidate, decimals) == value:
+                return True
+    return False
+
+
 def check_figures(result: Answer, chunks: list[dict], calculations: list[Calculation]) -> list[str]:
     """Return a warning for every figure that doesn't match its excerpt or a calculator result."""
+    results = calculator_values(calculations)
     warnings = []
     for figure in result.figures:
         if figure.source == 0:
-            if not any(math.isclose(figure.value, c.result, rel_tol=0.001) for c in calculations):
+            if not matches_calculation(figure.value, results):
                 warnings.append(f"'{figure.name}' ({figure.value}) doesn't match any calculator result")
         elif not 1 <= figure.source <= len(chunks):
             warnings.append(f"'{figure.name}' cites excerpt [{figure.source}], which doesn't exist")
-        elif not number_in_text(figure.value, chunks[figure.source - 1]["text"]):
+        elif (not number_in_text(figure.value, chunks[figure.source - 1]["text"])
+              and not matches_calculation(figure.value, results)):
             warnings.append(f"'{figure.name}' ({figure.value}) not found in excerpt [{figure.source}]")
     return warnings
 
@@ -213,6 +248,50 @@ def retrieve_context(question: str) -> list[dict]:
 qdrant = get_qdrant()
 client = OpenAI(api_key=config.OPENAI_API_KEY, max_retries=3, timeout=45)
 
+# --- SEC lookups through MCP: our agent is a client of app/sec_mcp_server.py ---
+# Client(sec_server) speaks MCP to the server in memory. Client("https://.../mcp") would speak the same
+# protocol over HTTP to a server elsewhere: only that argument changes.
+
+async def _list_sec_tools() -> list:
+    async with Client(sec_server) as mcp_client:
+        return await mcp_client.list_tools()
+
+
+async def _call_sec_tool(name: str, arguments: dict):
+    async with Client(sec_server) as mcp_client:
+        return await mcp_client.call_tool(name, arguments, raise_on_error=False)
+
+
+@cache
+def sec_tools() -> list[dict]:
+    """Ask the MCP server which tools it has (tool discovery), once, in OpenAI's tool format."""
+    return [
+        {"type": "function", "name": tool.name, "description": tool.description,
+         "parameters": tool.input_schema, "strict": False}
+        for tool in asyncio.run(_list_sec_tools())
+    ]
+
+
+def run_sec_tool(call, chunks: list[dict], steps: list[str]) -> str:
+    """Send the model's SEC lookup to the MCP server. The result becomes a new excerpt the model can cite."""
+    arguments = json.loads(call.arguments)
+    result = asyncio.run(_call_sec_tool(call.name, arguments))
+    text = result.content[0].text if result.content else "no result"
+    if result.is_error:
+        steps.append(f"SEC lookup {arguments} failed: {text}")
+        return f"Error: {text}"  # the model sees the reason, e.g. the list of valid names, and can retry
+
+    fact = result.data
+    chunks.append({
+        "doc_name": "", "company": fact["company"], "year": fact["fiscal_year"], "page": None,
+        "chunk": f"sec-{fact['tag']}-{fact['fiscal_year']}", "score": 0.0,
+        "text": (f"SEC XBRL lookup: {fact['figure']} [XBRL tag {fact['tag']}], fiscal year {fact['fiscal_year']} "
+                 f"(period ending {fact['period_end']}): {format_musd(fact['value'])} {fact['unit']}"),
+    })
+    steps.append(f"SEC lookup via MCP: {fact['company']} {fact['figure']} FY{fact['fiscal_year']} = "
+                 f"{format_musd(fact['value'])} {fact['unit']}, added as excerpt [{len(chunks)}]")
+    return f"Excerpt [{len(chunks)}]: {chunks[-1]['text']}"
+
 
 def unknown_inputs(expression: str, chunks: list[dict], calculations: list[Calculation]) -> list[str]:
     """Return the numbers in a calculation that aren't in the excerpts or earlier calculator results."""
@@ -229,24 +308,29 @@ def unknown_inputs(expression: str, chunks: list[dict], calculations: list[Calcu
     return unknown
 
 
-def run_tool(call, chunks: list[dict], calculations: list[Calculation]) -> str:
-    """Run one tool the model asked for and return the text it gets back."""
+def run_tool(call, chunks: list[dict], calculations: list[Calculation], steps: list[str]) -> str:
+    """Run one tool the model asked for, note it in steps, and return the text the model gets back."""
+    if call.name != "calculate":
+        return run_sec_tool(call, chunks, steps)
     expression = json.loads(call.arguments)["expression"]
     unknown = unknown_inputs(expression, chunks, calculations)
     if unknown:
         print(f"rejected: {expression} ({', '.join(unknown)} not found)")
+        steps.append(f"Rejected `{expression}`: {', '.join(unknown)} isn't in the excerpts, so the model must recheck")
         return (f"Error: {', '.join(unknown)} isn't in the excerpts or your earlier results. "
                 "Check the number and use the value exactly as the report writes it.")
     try:
         value = calculate(expression)
     except (ValueError, SyntaxError, ZeroDivisionError) as error:
+        steps.append(f"Calculator error on `{expression}`: {error}")
         return f"Error: {error}"  # the model sees this and can fix its expression
     calculations.append(Calculation(expression=expression, result=value))
     print(f"calculate: {expression} = {value}")
+    steps.append(f"Calculated `{expression}` = {round(value, 4):,}")
     return str(value)
 
 
-def run_agent(question: str, chunks: list[dict]):
+def run_agent(question: str, chunks: list[dict], steps: list[str]):
     """Call the model, running the tools it asks for, until it answers or MAX_STEPS runs out."""
     messages = [{"role": "user", "content": f"Excerpts:\n\n{format_excerpts(chunks)}\n\nQuestion: {question}"}]
     calculations = []
@@ -258,7 +342,7 @@ def run_agent(question: str, chunks: list[dict]):
             model=config.OPENAI_MODEL,
             instructions=INSTRUCTIONS,
             input=messages,
-            tools=[CALCULATOR_TOOL],
+            tools=[CALCULATOR_TOOL, *sec_tools()],
             tool_choice="none" if last_step else "auto",  # last step: must answer now
             text_format=Answer,
         )
@@ -272,13 +356,19 @@ def run_agent(question: str, chunks: list[dict]):
             if last_step and result:
                 print("Forced an answer on the last step")
                 result.confidence = "low"
+                steps.append(f"Step {step + 1}: last step, tools off, so the model had to answer now "
+                             "(confidence set to low)")
+            else:
+                steps.append(f"Step {step + 1}: the model wrote its answer")
             return result, calculations, input_tokens, output_tokens
+
+        steps.append(f"Step {step + 1}: the model asked for {len(tool_calls)} tool call(s)")
 
         for call in tool_calls:
             messages.append({"type": "function_call", "call_id": call.call_id,
                              "name": call.name, "arguments": call.arguments})
             messages.append({"type": "function_call_output", "call_id": call.call_id,
-                             "output": run_tool(call, chunks, calculations)})
+                             "output": run_tool(call, chunks, calculations, steps)})
 
     print(f"Agent stopped: no answer after {MAX_STEPS} steps")
     return None, calculations, input_tokens, output_tokens
@@ -288,9 +378,15 @@ def ask(question: str) -> AskResponse:
     """Answer one question from the 10-K reports. Always returns an AskResponse, even if a call fails."""
     result = None
     chunks = []
+    steps = []
     try:
         chunks = retrieve_context(question)
-        result, calculations, input_tokens, output_tokens = run_agent(question, chunks)
+        pages = [chunk for chunk in chunks if chunk["page"] is not None]
+        retrieved = f"Searched the 12 reports: {len(pages)} page excerpts"
+        if len(pages) < len(chunks):  # the last excerpt is the SEC table
+            retrieved += f", plus SEC key figures for {chunks[-1]['company']} {chunks[-1]['year']}"
+        steps.append(retrieved)
+        result, calculations, input_tokens, output_tokens = run_agent(question, chunks, steps)
     except APIError as error:
         print("API call failed: ", type(error).__name__)
 
@@ -305,10 +401,15 @@ def ask(question: str) -> AskResponse:
         result.answer = ADVICE_DECLINE
         result.figures = []
         chunks = []  # no sources for a declined question
+        steps.append("Recognised as an investment-advice request: answer replaced with a polite decline")
 
     warnings = check_figures(result, chunks, calculations)
     if warnings:
         result.confidence = "low"
+
+    if result.figures:
+        steps.append(f"Checked {len(result.figures)} figure(s) against their excerpts and calculator results: "
+                     + (f"{len(warnings)} warning(s), confidence set to low" if warnings else "all match"))
 
     sources = [
         Source(id=i, company=chunk["company"], year=chunk["year"], page=chunk["page"],
@@ -323,4 +424,5 @@ def ask(question: str) -> AskResponse:
         output_tokens=output_tokens,
         cost_usd=round(cost, 6),
         calculations=calculations,
+        steps=steps
     )

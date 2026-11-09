@@ -9,8 +9,8 @@ from pydantic import BaseModel
 from app import config
 from app.analyst import FALLBACK_ANSWER, PRICES, TOP_K, ask, qdrant
 
-RUN_NAME = "sec_two_years_2"  # change this for each experiment so results files don't overwrite each other
-QUESTIONS = [5, 6, 7, 11, 15, 17, 19, 22, 25, 34, 40, 43, 44, 45, 46]  # None = all 48
+RUN_NAME = "final_48"  # change this for each experiment so results files don't overwrite each other
+QUESTIONS = None #[5, 6, 7, 11, 15, 17, 19, 22, 25, 34, 40, 43, 44, 45, 46]  # None = all 48
 REJUDGE_FROM = None  # None = run ask() again; a path = only re-grade those saved answers
 JUDGE_MODEL = "gpt-4o-mini"
 JUDGE_INSTRUCTIONS = (
@@ -99,6 +99,8 @@ else:
             "warnings": result.warnings,
             "calculations": [calculation.model_dump() for calculation in result.calculations],
             "judge_cost_usd": round(judge_cost, 6),
+            "figures": [figure.model_dump() for figure in result.figures],
+            "steps": result.steps,
         })
         print(f"{n:>2}/{len(tests)}  {'CORRECT' if verdict.correct else 'WRONG  '}  "
               f"hit={'-' if rank is None else rank}  {test['company']}: {test['question'][:70]}")

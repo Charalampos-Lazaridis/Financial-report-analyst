@@ -1,4 +1,4 @@
-# Financial-Report Analyst
+# Financial Report Analyst
 
 An AI agent that answers questions about public companies from their SEC 10-K annual reports. Every number in an answer cites the page or data source it came from.
 

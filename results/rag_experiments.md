@@ -37,6 +37,61 @@ Next:
 
 Known issues in the shipped version: answers are short (median about 100 characters); the model does arithmetic in its head (Apple net income per day: 306.03 instead of 306.88); the "evidence retrieved" metric counts any one evidence page, which overstates multi-page questions (hence the "all pages" column).
 
+## Unit 4: hand labels, judge validation, failure taxonomy (2026-11-10)
+
+Setup: the Unit 3 agent as live since 2026-11-10 (fixed retrieval, SEC key figures, calculator, SEC lookup via MCP, `MAX_STEPS = 4`), run `final_48` on all 48 questions ($0.1003 answers + $0.0038 judge). Every answer was then labelled by hand in `results/labels_2026-11-09.json`, with a cause for each wrong one. Charts: `python -m scripts.judge_agreement` → `results/all-plots/plots_<run>/`.
+
+### Headline
+
+**Hand-labelled accuracy: 32/48 (67%).** (Unit 2 shipped at 17/48 by the old judge.)
+
+Labelling rules: rounding differences are correct; a short answer is correct if its conclusion is right and the evidence and cited figures support it, and wrong if the evidence wasn't retrieved (#17, #31); if the answer is sound and the reference uses an unusual definition or sign, it is correct with cause `reference questionable` (#5, #34).
+
+### Is the judge trustworthy?
+
+TPR = share of truly correct answers the judge accepts; TNR = share of truly wrong answers it rejects.
+
+| Judge | Judge score | Agrees with hand labels | TPR | TNR |
+|---|---|---|---|---|
+| Unit 2–3 judge (`final_48`) | 20/48 | 36/48 (75%) | 62.5% (20/32) | 100% (16/16) |
+| One prompt fix (`rejudge_v2`) | 28/48 | 42/48 (88%) | 84.4% (27/32) | 93.8% (15/16) |
+
+The old judge was too strict, never too lenient: 7 of its 12 disagreements were short answers it rejected for leaving out supporting numbers. The fix (rounding example, yes/no answers need no supporting numbers, "key numbers are the ones the question asks for", a rule for lists) flipped 8 verdicts: 7 to agree with the hand labels, 1 new false positive (#31, a generic answer without the 40% U.S. government figure). Still disagreeing: #5 and #34 (questionable references, left alone on purpose), #7, #28, #36 (short or partial answers). Caveat: the fix was tuned on the same 48 answers it is measured on, so the "after" agreement is somewhat optimistic. We stopped after one fix.
+
+### Why the agent is wrong (16 wrong answers)
+
+| Rank | Cause | n | Questions | Example | Candidate fix (Unit 6) |
+|---|---|---|---|---|---|
+| 1 | **Missing input**: the page with the key fact wasn't retrieved | 5 | #2, #3, #8, #17, #31 | #8 Amcor acquisitions: Note 5 (p63) not retrieved, so it named a deal signed after year end | Retrieval for notes and risk factors; prompt rule "say what's missing instead of substituting" |
+| 2 | **Right inputs, wrong conclusion** (no calculation) | 4 | #1, #10, #16, #25 | #25 Best Buy: cited the right revenue and gross profit, never calculated, called 22.4% → 22.5% → 21.4% "not consistent" | "Compute ratios with the calculator before judging a trend or comparison" |
+| 3 | **Misread the question, scope or metric** | 4 | #13, #14, #18, #20 | #18 AmEx: listed issued senior notes when asked which securities are exchange-registered (only common shares) | For "what drove" questions, quote the reason the report gives; check whether the metric applies |
+| 4 | **Agent loop**: retried a failed lookup, or ran out of steps | 2 | #11, #46 | #46 Verizon: input check rejected two misread numbers, MCP fetched the right ones, out of steps before recalculating, made up 0.50 | Server accepts synonyms and plurals; "answer only what's asked"; don't retry a failed lookup |
+| 5 | **PDF extraction** | 1 | #30 | Boeing gross profit is an unlabelled row in pypdf's text; the agent used loss from operations instead | Table-aware extraction |
+
+Main finding: for 11 of the 16 wrong answers the evidence page was retrieved (#1 had 2 of its 3 pages); only the 5 "missing input" cases lacked it. **Most failures happen after retrieval**, in reading and reasoning. Checks on numbers can't catch them: in #18 and #30 every cited figure exists in the report ("grounding ≠ correctness").
+
+Other findings from the charts:
+
+- By company: 3M 0/3 and AMD 2/7; PepsiCo, J&J, CVS and AES all correct.
+- Evidence pages: all retrieved → 26/36 correct; none retrieved → 3/8.
+- The agent's confidence carries little signal: "high" 24/33 correct (73%), "low" 8/15 (53%).
+- Forced at the last step: 4/6 correct, the same rate as unforced answers, but forcing always sets confidence to low. Three correct answers (#40, #44, #45) were forced because of unrequested extra lookups or repeated calculations.
+- Wrong answers aren't shorter: median 131 characters vs 101 for correct ones.
+
+### Code checks
+
+Five pass/fail rules computed from the saved results, with no model calls (`scripts/judge_agreement.py`, chart `15_code_checks.png`). A check is useful if answers that fail it are wrong much more often than answers that pass.
+
+| Check | Passes | Correct when it passes | Correct when it fails |
+|---|---|---|---|
+| Figure check clean (no warnings) | 37/48 | 70% | 55% (6/11) |
+| No fallback | 48/48 | 67% | never fails |
+| Cost under $0.005 per question | 44/48 | 68% | 50% (2/4) |
+| Finished within `MAX_STEPS` (not forced) | 42/48 | 67% | 67% (4/6) |
+| Numbers in the answer text backed by a figure or calculator result | 43/48 | 70% | **40% (2/5)** |
+
+The new text-number check gives the clearest signal: it flags #14, #18 and #46 (wrong) and #22 and #38 (right), and it catches the made-up "0.50" in #46 and the mental-arithmetic "14.4%" in #38, which the app's figure check misses because it only checks the `figures` list. It is a candidate guardrail for the app (Unit 6). Still, none of the checks separates right from wrong well: the main failures are reasoning errors with real numbers, and checks on numbers can't see those. Small samples: 4–11 failures per check.
+
 ## Run log
 
 | Run | Date | Change vs. previous | Accuracy | Hit rate | Hit+correct | Hit+wrong | Miss+correct | Miss+wrong | Cost (answers + judge) |

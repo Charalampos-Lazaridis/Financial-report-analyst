@@ -9,3 +9,4 @@ uvicorn         # the server that runs FastAPI
 streamlit       # the web UI
 qdrant-client   # vector database (local folder in dev, Qdrant Cloud in prod)
 fastmcp
+matplotlib      # eval charts (scripts/judge_agreement.py)

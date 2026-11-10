@@ -9,7 +9,7 @@ from pydantic import BaseModel
 from app import config
 from app.analyst import FALLBACK_ANSWER, PRICES, TOP_K, ask, qdrant
 
-RUN_NAME = "final_48"  # change this for each experiment so results files don't overwrite each other
+RUN_NAME = "rejudge_v2"  # change this for each experiment so results files don't overwrite each other
 QUESTIONS = None #[5, 6, 7, 11, 15, 17, 19, 22, 25, 34, 40, 43, 44, 45, 46]  # None = all 48
 REJUDGE_FROM = None  # None = run ask() again; a path = only re-grade those saved answers
 JUDGE_MODEL = "gpt-4o-mini"
@@ -18,13 +18,19 @@ JUDGE_INSTRUCTIONS = (
     "Compare the candidate answer with the reference answer. Judge meaning, not wording.\n"
     "Correct if the candidate reaches the same conclusion and its key numbers match the reference:\n"
     "- Small rounding differences and different units for the same amount "
-    "(e.g. $1.5 billion vs $1,500 million) are fine.\n"
+    "(e.g. 2.72 vs 2.7, 16.52% vs 16.5%, $1.5 billion vs $1,500 million) are fine.\n"
     "- Extra detail, context or numbers never make an answer wrong, unless they contradict the reference.\n"
     "- If the reference says a metric is not meaningful for this company, or that an amount is zero / "
     "none / not outlined, a candidate that says the same thing in other words is correct.\n"
-    "- For yes/no questions, the yes or no must match.\n"
+    "- For yes/no questions, the yes or no must match. Supporting numbers or explanations in the reference "
+    "are not required, as long as nothing the candidate says contradicts them.\n"
+    "- Key numbers are the ones the question asks for. A number the reference only uses to support its "
+    "conclusion is not required.\n"
+    "- For list questions (products, regions, legal matters...), the candidate is correct if it names the "
+    "main items without naming wrong ones. Missing a minor item, or grouping items differently "
+    "(countries vs regions), is fine.\n"
     "Incorrect if a key number or the conclusion differs or is missing, "
-    "or if the candidate says the information isn't vailable while the reference gives an answer."
+    "or if the candidate says the information isn't available while the reference gives an answer."
 )
 
 class Verdict(BaseModel):

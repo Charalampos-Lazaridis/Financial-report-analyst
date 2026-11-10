@@ -121,7 +121,7 @@
     "n": 4,
     "label": true,
     "cause": "",
-    "note": "correct page retrieved, would apprecaite some explanation although it followed the prompt",
+    "note": "short answer,correct page retrieved, would apprecaite some explanation although it followed the prompt",
     "evidence_pages": [
       131
     ],
@@ -315,9 +315,9 @@
   },
   {
     "n": 8,
-    "label": null,
-    "cause": "",
-    "note": "",
+    "label": false,
+    "cause": "missing input",
+    "note": "page 63 (Note 5) not retrieved; named an Aug 2023 subsequent-event agreement (India) as an FY2023 acquisition",
     "evidence_pages": [
       63
     ],
@@ -355,9 +355,9 @@
   },
   {
     "n": 9,
-    "label": null,
+    "label": true,
     "cause": "",
-    "note": "",
+    "note": "short answer: one sentence, no detail",
     "evidence_pages": [
       4
     ],
@@ -395,9 +395,9 @@
   },
   {
     "n": 10,
-    "label": null,
-    "cause": "",
-    "note": "",
+    "label": false,
+    "cause": "wrong reasoning",
+    "note": "numbers right (GM 19.4% → 18.5%), but said Yes by switching to operating margin, which rose mainly from a +104 restructuring gain",
     "evidence_pages": [
       49
     ],
@@ -438,9 +438,9 @@
   },
   {
     "n": 11,
-    "label": null,
-    "cause": "",
-    "note": "",
+    "label": false,
+    "cause": "wrong reasoning",
+    "note": "all inputs on p55 (retrieved); retried Inventories 3× although the error listed Inventory; forced → not applicable. Correct 1.57",
     "evidence_pages": [
       55
     ],
@@ -491,7 +491,7 @@
   },
   {
     "n": 12,
-    "label": null,
+    "label": true,
     "cause": "",
     "note": "",
     "evidence_pages": [
@@ -534,9 +534,9 @@
   },
   {
     "n": 13,
-    "label": null,
-    "cause": "",
-    "note": "",
+    "label": false,
+    "cause": "wrong reasoning",
+    "note": "answer described the Client segment decline as total revenue → wrong direction",
     "evidence_pages": [
       42
     ],
@@ -577,9 +577,9 @@
   },
   {
     "n": 14,
-    "label": null,
-    "cause": "",
-    "note": "",
+    "label": false,
+    "cause": "wrong reasoning",
+    "note": "close call, numbers are correct, p42  names Xilinx intangibles amortization as the driver; answer gave generic causes",
     "evidence_pages": [
       42
     ],
@@ -620,7 +620,7 @@
   },
   {
     "n": 15,
-    "label": null,
+    "label": true,
     "cause": "",
     "note": "",
     "evidence_pages": [
@@ -660,9 +660,9 @@
   },
   {
     "n": 16,
-    "label": null,
-    "cause": "",
-    "note": "",
+    "label": false,
+    "cause": "wrong reasoning",
+    "note": "wrong comparisons. Data Center +64% vs Gaming +21%; picked the smaller; Data Center wins on any reading (%, absolute, share); 6/9 figure warnings",
     "evidence_pages": [
       47
     ],
@@ -703,9 +703,9 @@
   },
   {
     "n": 17,
-    "label": null,
-    "cause": "",
-    "note": "",
+    "label": false,
+    "cause": "missing input",
+    "note": "The answer is 'correct'. But since the page was not retrieved and no explanation was given it will be considered wrong. p11 (16%, one Gaming customer) not retrieved; p3 (retrieved) supports 'small number of customers… substantial part', so conclusion right but no figure or reasoning",
     "evidence_pages": [
       11
     ],
@@ -743,9 +743,9 @@
   },
   {
     "n": 18,
-    "label": null,
-    "cause": "",
-    "note": "",
+    "label": false,
+    "cause": "wrong reasoning",
+    "note": "misread question (issued debt ≠ exchange-registered),  all figures 'match' but irrelevant",
     "evidence_pages": [
       0
     ],
@@ -786,7 +786,7 @@
   },
   {
     "n": 19,
-    "label": null,
+    "label": true,
     "cause": "",
     "note": "",
     "evidence_pages": [
@@ -828,9 +828,9 @@
   },
   {
     "n": 20,
-    "label": null,
-    "cause": "",
-    "note": "",
+    "label": false,
+    "cause": "wrong reasoning",
+    "note": "no metric or reasoning; p95 (retrieved) has no operating-income line (lender format), so the expected answer is 'not a useful metric'; pretax margin 25.2% → 18.1% would support 'not improving' but wasn't given",
     "evidence_pages": [
       95
     ],
@@ -871,7 +871,7 @@
   },
   {
     "n": 21,
-    "label": null,
+    "label": true,
     "cause": "",
     "note": "",
     "evidence_pages": [
@@ -913,9 +913,9 @@
   },
   {
     "n": 22,
-    "label": null,
+    "label": true,
     "cause": "",
-    "note": "",
+    "note": "short answer, could state the percentages too",
     "evidence_pages": [
       43
     ],
@@ -952,7 +952,7 @@
   },
   {
     "n": 23,
-    "label": null,
+    "label": true,
     "cause": "",
     "note": "",
     "evidence_pages": [
@@ -996,7 +996,7 @@
   },
   {
     "n": 24,
-    "label": null,
+    "label": true,
     "cause": "",
     "note": "",
     "evidence_pages": [
@@ -1040,9 +1040,9 @@
   },
   {
     "n": 25,
-    "label": null,
-    "cause": "",
-    "note": "",
+    "label": false,
+    "cause": "wrong reasoning",
+    "note": "right 4 inputs cited (p39 retrieved) but no calculation; margins 22.4% -> 22.5% -> 21.4% (max 1.1 pp) = consistent; likely confused gross profit drop (-14.8%) or relative change with margin change",
     "evidence_pages": [
       39
     ],
@@ -1080,7 +1080,7 @@
   },
   {
     "n": 26,
-    "label": null,
+    "label": true,
     "cause": "",
     "note": "",
     "evidence_pages": [
@@ -1119,7 +1119,7 @@
   },
   {
     "n": 27,
-    "label": null,
+    "label": true,
     "cause": "",
     "note": "",
     "evidence_pages": [
@@ -1160,9 +1160,9 @@
   },
   {
     "n": 28,
-    "label": null,
+    "label": true,
     "cause": "",
-    "note": "",
+    "note": "short answer,The question asks 'are there any', so 'Yes' is technically right, but the answer names an incomplete list",
     "evidence_pages": [
       61
     ],
@@ -1203,7 +1203,7 @@
   },
   {
     "n": 29,
-    "label": null,
+    "label": true,
     "cause": "",
     "note": "",
     "evidence_pages": [
@@ -1244,9 +1244,9 @@
   },
   {
     "n": 30,
-    "label": null,
-    "cause": "",
-    "note": "",
+    "label": false,
+    "cause": "extraction",
+    "note": "p54 (retrieved) shows gross profit as an unlabelled row (3,502 / 3,017); agent used loss from operations (-3,547 / -2,902) as 'gross loss' -> 'No'. Correct: 4.8% -> 5.3%, improving",
     "evidence_pages": [
       54
     ],
@@ -1286,9 +1286,9 @@
   },
   {
     "n": 31,
-    "label": null,
-    "cause": "",
-    "note": "",
+    "label": false,
+    "cause": "missing input",
+    "note": "The conclusion is roughly right, but the specific fact the reference hinges on (40% U.S. government) wasn't available and isn't stated.",
     "evidence_pages": [
       7,
       9,
@@ -1328,7 +1328,7 @@
   },
   {
     "n": 32,
-    "label": null,
+    "label": true,
     "cause": "",
     "note": "",
     "evidence_pages": [
@@ -1370,7 +1370,7 @@
   },
   {
     "n": 33,
-    "label": null,
+    "label": true,
     "cause": "",
     "note": "",
     "evidence_pages": [
@@ -1410,9 +1410,9 @@
   },
   {
     "n": 34,
-    "label": null,
-    "cause": "",
-    "note": "",
+    "label": true,
+    "cause": "reference questionable",
+    "note": "the reference is wrong, flips the signs",
     "evidence_pages": [
       54
     ],
@@ -1449,9 +1449,9 @@
   },
   {
     "n": 35,
-    "label": null,
+    "label": true,
     "cause": "",
-    "note": "",
+    "note": "short answer,would appreciate some more thorough explnation",
     "evidence_pages": [
       107,
       109
@@ -1493,7 +1493,7 @@
   },
   {
     "n": 36,
-    "label": null,
+    "label": true,
     "cause": "",
     "note": "",
     "evidence_pages": [
@@ -1534,9 +1534,9 @@
   },
   {
     "n": 37,
-    "label": null,
+    "label": true,
     "cause": "",
-    "note": "",
+    "note": "short answer, Considering the annswer is correct and the correct page was retrieved. Needs reasoning though",
     "evidence_pages": [
       67
     ],
@@ -1577,9 +1577,9 @@
   },
   {
     "n": 38,
-    "label": null,
+    "label": true,
     "cause": "",
-    "note": "",
+    "note": "revenue +1.3% right (SEC table; p27 evidence not retrieved, same numbers); net income drop stated as 14.4%, actually 14.1% (mental math, no calculator)",
     "evidence_pages": [
       27
     ],
@@ -1618,7 +1618,7 @@
   },
   {
     "n": 39,
-    "label": null,
+    "label": true,
     "cause": "",
     "note": "",
     "evidence_pages": [
@@ -1661,9 +1661,9 @@
   },
   {
     "n": 40,
-    "label": null,
+    "label": true,
     "cause": "",
-    "note": "",
+    "note": "very short answer, unrequested extra steps",
     "evidence_pages": [
       45,
       46
@@ -1717,7 +1717,7 @@
   },
   {
     "n": 41,
-    "label": null,
+    "label": true,
     "cause": "",
     "note": "",
     "evidence_pages": [
@@ -1759,7 +1759,7 @@
   },
   {
     "n": 42,
-    "label": null,
+    "label": true,
     "cause": "",
     "note": "",
     "evidence_pages": [
@@ -1798,9 +1798,9 @@
   },
   {
     "n": 43,
-    "label": null,
+    "label": true,
     "cause": "",
-    "note": "",
+    "note": "short answer",
     "evidence_pages": [
       77
     ],
@@ -1838,9 +1838,9 @@
   },
   {
     "n": 44,
-    "label": null,
+    "label": true,
     "cause": "",
-    "note": "",
+    "note": "unrequested extra tool calls",
     "evidence_pages": [
       61,
       63
@@ -1893,9 +1893,9 @@
   },
   {
     "n": 45,
-    "label": null,
+    "label": true,
     "cause": "",
-    "note": "",
+    "note": "unrequested extra tool calls",
     "evidence_pages": [
       61,
       63
@@ -1948,9 +1948,9 @@
   },
   {
     "n": 46,
-    "label": null,
-    "cause": "",
-    "note": "",
+    "label": false,
+    "cause": "ran out of steps",
+    "note": "correct 0.54 (not healthy); misread receivables twice (25,406, 24,406), both rejected by input check; got right inputs via MCP in step 3 but forced before recalculating; invented 0.50 in text and said 'healthy'",
     "evidence_pages": [
       55
     ],
@@ -2004,9 +2004,9 @@
   },
   {
     "n": 47,
-    "label": null,
+    "label": true,
     "cause": "",
-    "note": "",
+    "note": "short answer",
     "evidence_pages": [
       22,
       55
@@ -2045,7 +2045,7 @@
   },
   {
     "n": 48,
-    "label": null,
+    "label": true,
     "cause": "",
     "note": "",
     "evidence_pages": [

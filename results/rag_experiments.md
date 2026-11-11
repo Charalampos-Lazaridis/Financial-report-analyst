@@ -92,6 +92,30 @@ Five pass/fail rules computed from the saved results, with no model calls (`scri
 
 The new text-number check gives the clearest signal: it flags #14, #18 and #46 (wrong) and #22 and #38 (right), and it catches the made-up "0.50" in #46 and the mental-arithmetic "14.4%" in #38, which the app's figure check misses because it only checks the `figures` list. It is a candidate guardrail for the app (Unit 6). Still, none of the checks separates right from wrong well: the main failures are reasoning errors with real numbers, and checks on numbers can't see those. Small samples: 4–11 failures per check.
 
+## Unit 6 fixes: run `unit6_fixes` (2026-11-11)
+
+Fixes picked from the Unit 4 taxonomy, general rules rather than one patch per question:
+
+1. **SEC lookup finds figures by label** (`app/sec_mcp_server.py`). A name that isn't one of the 19 known figures or an exact XBRL tag is matched against the labels of the tags the company actually files (shared words / all words, filler words like "of" and "net" ignored). Matches scoring below 0.5 fail with the closest labels listed instead of returning a number: without that limit "Cost of Sales" returned PepsiCo's *Variable Lease, Cost*. "Inventories" → Inventory, Net; "short-term investments" → Short-term Investments. The result includes the matched `label`.
+2. **Text-number check in the app** (`check_figures`): a decimal or percentage in the answer text that matches no figure or calculator result → warning, confidence low (the Unit 4 code check, now a guardrail).
+3. **Zero-input check:** a calculation with a literal 0 → warning. Found live: AMD quick ratio `(4835 + 0 + 4126) / 6369` = 1.41 with confidence high, after the short-term investments lookup failed.
+4. **Repeat stop** (`run_agent`): if every tool call in a step repeats an earlier one, the next call has tools off and the answer is not marked forced.
+5. **Citation fix** (`fix_sources`): a figure not in its cited excerpt but in exactly one other has its citation moved there (noted in the trace).
+6. **Two prompt lines:** calculate before judging a trend or comparison; answer only the years, figures and companies asked for.
+
+Result ($0.1125 answers + $0.0047 judge, $0.0023 per question): **judge 27/48** (`rejudge_v2` judge; 28/48 before), **hand-checked 34/48 (71%)**, up from 32/48. Every answer where the new judge disagreed with the old hand label, and every answer both called wrong, was checked by hand with the Unit 4 rules.
+
+| # | Before → after | Why |
+|---|---|---|
+| 11 AMD quick ratio | wrong → **right** | 1.57; "Inventories" lookup no longer retried 3× |
+| 46 Verizon quick ratio | wrong → **right** | 0.54, no longer out of steps |
+| 10 Amcor gross margin | wrong → **right** | "No, 19.39% → 18.54%" (the trend rule) |
+| 6 AES return on assets | right → **wrong** | sign of the net loss dropped: 546 instead of (546) → 1.53, confidence high |
+
+The other 44 verdicts are unchanged by hand. Remaining wrong answers (14): missing input 5 (#2, #3, #8, #17, #31), misread question/scope/metric 4 (#13, #14, #18, #20), right inputs but wrong conclusion 3 (#1, #16, #25), sign dropped 1 (#6), PDF extraction 1 (#30). The "agent loop" cause is gone. Evidence was retrieved for 9 of the 14.
+
+Behaviour: repeat stop fired on 2 questions, citations moved on 3, forced answers 6 → 5. Confidence is somewhat more informative: "high" 22/27 correct (81%, was 73%), "low" 11/20 (55%). Warnings 11 → 16; one known false alarm: the zero check on #46, where Verizon really has no short-term investments. Side effect: answers got shorter ("1.53", "Roughly 12 times"), probably from the "answer only what's asked" line; left as is. The +2 is within the noise seen between identical runs, but each flip was checked by hand and the three gains are the questions the fixes targeted.
+
 ## Run log
 
 | Run | Date | Change vs. previous | Accuracy | Hit rate | Hit+correct | Hit+wrong | Miss+correct | Miss+wrong | Cost (answers + judge) |

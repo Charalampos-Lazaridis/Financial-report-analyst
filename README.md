@@ -32,7 +32,7 @@ flowchart LR
 2. **Agent loop.** `gpt-4o-mini` (OpenAI Responses API) reads the excerpts and may call tools for up to 4 rounds:
    - `calculate`: safe arithmetic (parsed with Python's `ast`, no `eval`).
    - `get_sec_fact`: a live SEC companyfacts lookup, served by a small MCP server (`fastmcp`).
-3. **Structured, checked output.** The answer is a Pydantic model (answer, figures with sources, confidence). Code then checks that every figure appears in its cited source or matches a calculator result, and replaces advice requests with a fixed decline.
+3. **Structured, checked output.** The answer is a Pydantic model (answer, figures with sources, confidence). Code then checks that every figure appears in its cited source or matches a calculator result, that numbers in the answer text are backed by a figure, and that no calculation filled a missing input with 0; any warning sets confidence to low. Advice requests get a fixed decline.
 
 ## Results
 
@@ -42,7 +42,8 @@ Evaluated on 48 questions from [FinanceBench](https://github.com/patronus-ai/fin
 |---|---|
 | Naive RAG (top 5 chunks) | 9/48 |
 | Tuned RAG (prompt, top 20 chunks), shipped in Unit 2 | 17/48 |
-| **Agent (statement retrieval, SEC figures, calculator, MCP), labelled by hand** | **32/48 (67%)** |
+| Agent (statement retrieval, SEC figures, calculator, MCP), labelled by hand | 32/48 (67%) |
+| **Agent + fixes from the failure analysis, checked by hand** | **34/48 (71%)** |
 
 For context, the FinanceBench paper reports GPT-4-Turbo with a shared vector store failing or refusing about 81% of its questions.
 
@@ -55,17 +56,19 @@ For context, the FinanceBench paper reports GPT-4-Turbo with a shared vector sto
 
 The original judge was too strict, mostly on short but correct answers. The fix was tuned on these same 48 answers, so the "after" numbers are somewhat optimistic.
 
-**Why the agent is still wrong (16 answers):**
+**Fixing what the failure analysis found.** The first hand-labelled run had 16 wrong answers. The fixes were general rules, not patches for single questions: the SEC lookup matches any figure name to the closest XBRL label (and refuses weak matches rather than return a wrong number), the agent stops when it only repeats earlier tool calls, wrong citations are moved to the excerpt that holds the number, and two new checks lower confidence when a number in the answer text has no source or a calculation uses 0 as an input. Three targeted questions became correct (AMD and Verizon quick ratio, Amcor gross margin), one became wrong (AES return on assets: the sign of a net loss was dropped). A change of 2 is within run-to-run noise, but every changed verdict was checked by hand.
+
+**Why the agent is still wrong (14 answers):**
 
 | Cause | Count |
 |---|---|
 | The page with the key fact wasn't retrieved | 5 |
-| Right numbers, wrong conclusion (no calculation) | 4 |
 | Misread the question, scope or metric | 4 |
-| Agent loop: retried a failed lookup or ran out of steps | 2 |
+| Right numbers, wrong conclusion | 3 |
+| Sign of a net loss dropped | 1 |
 | PDF table extraction | 1 |
 
-In 11 of the 16 wrong answers the right page *was* retrieved: most failures happen in reasoning, not retrieval. Every experiment, with its setup and score, is logged in [`results/rag_experiments.md`](results/rag_experiments.md).
+In 9 of the 14 wrong answers the right page *was* retrieved: most failures happen in reasoning, not retrieval. Every experiment, with its setup and score, is logged in [`results/rag_experiments.md`](results/rag_experiments.md).
 
 ## Memory
 

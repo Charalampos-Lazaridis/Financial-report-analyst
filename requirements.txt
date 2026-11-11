@@ -6,7 +6,7 @@ beautifulsoup4  # turn filing HTML into plain text
 pypdf           # read text out of PDF files
 fastapi         # the /ask web API
 uvicorn         # the server that runs FastAPI
-streamlit       # the web UI
+streamlit==1.66.1  # the web UI (pinned: app/style.css targets its element names)
 qdrant-client   # vector database (local folder in dev, Qdrant Cloud in prod)
 fastmcp
 matplotlib      # eval charts (scripts/judge_agreement.py)

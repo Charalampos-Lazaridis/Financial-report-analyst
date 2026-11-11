@@ -8,6 +8,7 @@ app = FastAPI(title="Financial Report Analyst")
 class AskRequest(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True)
     question: str = Field(min_length=1, max_length=MAX_QUESTION_LENGTH)
+    user: str | None = Field(default=None, max_length=40)  # a name turns on memory; none = no memory
 
 @app.get("/")
 def health() -> dict:
@@ -15,4 +16,4 @@ def health() -> dict:
 
 @app.post("/ask")
 def ask_endpoint(request: AskRequest) -> AskResponse:
-    return ask(request.question)
+    return ask(request.question, request.user)

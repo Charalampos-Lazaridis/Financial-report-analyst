@@ -1,0 +1,115 @@
+/* Look of the Streamlit UI, loaded by app/ui.py. Colours, font, font size and corner radius are in
+   .streamlit/config.toml. Selectors use Streamlit's data-testid names (tested with streamlit 1.66.1,
+   pinned in requirements.txt). */
+
+/* --- Background: a glow from the top-left corner, faint cyan streaks at 45°, and a fine dot grid --- */
+.stApp {
+  background:
+    radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.09) 1px, transparent 0) 0 0 / 22px 22px,
+    radial-gradient(120% 100% at 0% 0%, #343b47 0%, #161b22 45%, #11151b 75%);
+  background-attachment: fixed;
+}
+.stApp::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(0, 207, 255, 0.16) 0%, rgba(0, 207, 255, 0) 75%);
+  -webkit-mask: repeating-linear-gradient(90deg, transparent 0 9%, #000 14%, transparent 22%);
+  mask: repeating-linear-gradient(90deg, transparent 0 9%, #000 14%, transparent 22%);
+  transform: skewX(45deg);
+  transform-origin: top left;
+}
+[data-testid="stHeader"] { background: transparent; }
+
+/* --- Layout: a narrower, airy centre column with more space between title, question and answer --- */
+[data-testid="stMainBlockContainer"] {
+  max-width: 840px;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+[data-testid="stMain"] [data-testid="stVerticalBlock"] { gap: 1.4rem; }
+[data-testid="stMain"] h1 { padding-bottom: 0.3rem; }
+[data-testid="stMain"] [data-testid="stCaptionContainer"] { margin-bottom: 1.2rem; }
+
+/* --- Typography --- */
+h1 {
+  font-weight: 400 !important;
+  letter-spacing: -0.03em;
+  font-size: 2.7rem !important;
+}
+[data-testid="stCaptionContainer"] { color: #A8AEB5; }
+/* section titles (st.subheader = h3): small and quiet, so the answer stands out */
+[data-testid="stMain"] h3 {
+  font-size: 1.05rem !important;
+  font-weight: 500 !important;
+  color: #A8AEB5;
+  letter-spacing: 0;
+  padding-top: 1.6rem;
+}
+
+/* --- The answer card (st.container(border=True)): fixed sizes, not affected by baseFontSize --- */
+[data-testid="stVerticalBlockBorderWrapper"]:has(> div > [data-testid="stVerticalBlock"]) {
+  background: rgba(30, 36, 45, 0.72);
+  backdrop-filter: blur(10px);
+  border-radius: 1.5rem;
+  padding: 0.4rem 0.6rem;
+}
+[data-testid="stMain"] h4 {
+  font-weight: 500 !important;
+  font-size: 23px !important;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stMarkdownContainer"] p { font-size: 16px; }
+
+/* --- Inputs and buttons --- */
+[data-testid="stTextInput"] input { padding: 0.85rem 1.2rem; }
+[data-testid="stTextInputRootElement"] { border-radius: 999px; }
+.stButton > button { padding: 0.5rem 1.6rem; font-weight: 500; }
+/* "Ask": a cyan gradient from the background streaks, with dark text for contrast */
+.stButton > button[kind="primary"] {
+  background: linear-gradient(135deg, #7FE3F7 0%, #3CC8EC 55%, #2AA8D8 100%);
+  border: none;
+  color: #06202A;
+  box-shadow: 0 4px 18px rgba(60, 200, 236, 0.25);
+}
+.stButton > button[kind="primary"]:hover {
+  filter: brightness(1.08);
+  color: #06202A;
+}
+
+/* --- Sidebar: translucent, so the background shows through --- */
+[data-testid="stSidebar"] {
+  background: rgba(27, 33, 42, 0.72);
+  backdrop-filter: blur(14px);
+}
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] li {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: #C8CDD2;
+}
+[data-testid="stSidebar"] h2 {
+  font-size: 0.8rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #A8AEB5;
+  margin-top: 1.2rem;
+}
+/* demo questions as soft chips */
+[data-testid="stSidebar"] .stButton > button {
+  font-size: 0.88rem;
+  font-weight: 400;
+  border-radius: 1rem;
+  background: rgba(60, 200, 236, 0.07);
+  border-color: rgba(60, 200, 236, 0.22);
+}
+[data-testid="stSidebar"] .stButton > button:hover {
+  background: rgba(60, 200, 236, 0.15);
+  border-color: #3CC8EC;
+}
+
+/* --- Expanders and tables: rounded --- */
+[data-testid="stExpander"] details { border-radius: 1rem; }
+[data-testid="stDataFrame"] { border-radius: 1rem; overflow: hidden; }

@@ -1,0 +1,20 @@
+# Streamlit theme: Google-style dark mode. Read automatically by `streamlit run` from the repo root
+# (locally and on Render). The background gradient and layout are in app/style.css.
+
+[theme]
+base = "dark"
+primaryColor = "#3CC8EC"            # cyan, from the streaks in the background
+backgroundColor = "#11151B"
+secondaryBackgroundColor = "#1B212A"
+textColor = "#F1F3F4"
+linkColor = "#7DD8F2"
+borderColor = "#2E3540"
+showWidgetBorder = true
+showSidebarBorder = false
+font = "Inter:https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap"
+baseFontSize = 17                   # slightly bigger than Streamlit's 16 (the answer has its own fixed size)
+baseRadius = "1rem"
+buttonRadius = "full"               # pill-shaped buttons
+
+[client]
+toolbarMode = "minimal"             # hide Streamlit's developer menu

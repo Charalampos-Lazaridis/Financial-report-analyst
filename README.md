@@ -119,3 +119,9 @@ results/              eval runs, hand labels, charts, experiment log
 - **Small eval set:** with 48 questions, identical runs differ by about ±2 answers.
 - **`/ask` has no authentication**; the live link is shared only with a few people.
 - **No investment advice!**
+
+## Stay in touch
+
+If you want to learn more about how I built this project you should check my series on hashnode: https://ai-engineering-devs.hashnode.dev/series/financial-report-analyst
+
+Or send me a message 😀

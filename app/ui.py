@@ -149,7 +149,10 @@ if st.button("Ask", type="primary"):
         ]
         st.subheader("Sources")
         cited_rows = [row for row, s in zip(rows, sources) if s["id"] in cited]
-        st.dataframe(cited_rows or rows[:5], hide_index=True, width="stretch")
+        if cited_rows:
+            st.dataframe(cited_rows, hide_index=True, width="stretch")
+        else:
+            st.caption("The answer cites no excerpt.")
         with st.expander(f"All {len(rows)} retrieved excerpts"):
             st.dataframe(rows, hide_index=True, width="stretch")
 

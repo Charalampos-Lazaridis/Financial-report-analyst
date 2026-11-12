@@ -7,6 +7,20 @@ Ask *"What is PepsiCo's FY2022 EBITDA margin?"* and the agent finds the income s
 
 ## Demo
 
+<!-- screenshot of the UI goes here -->
+
+The app runs on Render: a FastAPI service (`POST /ask`) and a Streamlit UI that calls it. Questions to try:
+
+| Question | What it shows |
+|---|---|
+| What was AMD's net revenue in FY2022? | A lookup: one model call, the figure cited to the income statement page |
+| What is PepsiCo's FY2022 EBITDA margin? | A calculation: inputs from the report and SEC figures, result from the calculator tool |
+| What was Boeing's R&D expense in FY2019? | A year that isn't in the report's PDF, fetched from the SEC through the MCP server |
+| What was Orange's net revenue in FY2020? | A company that isn't in the corpus: the agent says so instead of guessing |
+| Should I buy Apple stock? | Investment advice: politely declined |
+
+Each answer shows a confidence badge, a receipt (cost · model calls · calculations · seconds), the figures with their sources, and a "How I got this answer" panel. A typical question costs $0.001–0.003.
+
 ## What it does
 
 - **Answers from 12 real 10-Ks**: AMD, American Express, Boeing, PepsiCo, 3M, AES, CVS Health, Johnson & Johnson, Verizon (FY2022), Amcor, Best Buy (FY2023) and Apple (FY2025).
@@ -14,6 +28,7 @@ Ask *"What is PepsiCo's FY2022 EBITDA margin?"* and the agent finds the income s
 - **Calculates with a tool**: ratios and growth rates are computed by a calculator, not in the model's head.
 - **Looks up SEC data** for other years through an MCP server.
 - **Shows its work**: a "How I got this answer" panel lists every retrieval, tool call and check.
+- **Remembers past analyses** per user name, but only answers that passed every check.
 - **Has guardrails**: it declines investment advice, rejects calculations that use numbers not found in the sources, and marks answers with unverified figures as low confidence.
 
 ## How it works
@@ -72,6 +87,15 @@ In 9 of the 14 wrong answers the right page *was* retrieved: most failures happe
 
 ## Memory
 
+Enter a name in the sidebar and the agent keeps an **episodic memory**: a record of your earlier analyses, stored in a separate Qdrant collection (`memories`) and filtered by name.
+
+- **Recall.** A new question is embedded and compared with your past questions. Up to 3 with a cosine similarity of at least 0.45 are shown under "From your earlier analyses" and passed to the model as background.
+- **Not a source.** Recalled analyses get no excerpt number, so the model can't cite them or take numbers from them. Every figure still has to come from the reports or the SEC data.
+- **Write gate.** An answer is saved (question, short answer, key figures, date) only if it has sources, no warnings, isn't low confidence and isn't an advice request. A wrong answer would otherwise be recalled and repeated later. The UI says whether each answer was saved.
+- **No name, no memory.** Evals run without a name, so memory never affects the scores.
+
+Memory lives in `app/memory.py`. Names are lower-cased and trimmed, so "Ana " and "ana" are the same user. There is no login: anyone who types your name sees your memories.
+
 ## Tech stack
 
 Python 3.12 · OpenAI (`gpt-4o-mini`, `text-embedding-3-small`) · Qdrant (local folder or Qdrant Cloud) · FastAPI · Streamlit · fastmcp · pypdf · Pydantic · Render
@@ -99,7 +123,12 @@ streamlit run app/ui.py             # UI on http://localhost:8501
 
 ```
 app/
-  analyst.py          retrieval, agent loop, checks: the ask() logic
+  analyst.py          ask(): retrieval, memory, agent and checks, in that order
+  retrieval.py        report excerpts + SEC key figures for a question
+  agent.py            prompt, agent loop, tool routing
+  checks.py           figure, text-number and zero-input checks; citation fixes
+  memory.py           episodic memory: recall and write gate
+  schemas.py          Pydantic models (answer, figures, sources, response)
   tools.py            the calculator tool
   sec_mcp_server.py   MCP server with the get_sec_fact tool
   ingest.py           PDF → chunks → embeddings → Qdrant
